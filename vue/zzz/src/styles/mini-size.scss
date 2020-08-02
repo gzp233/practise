@@ -1,0 +1,46 @@
+@media (max-width: 1160px) {
+  .page-wrapper {
+    .home-menu {
+      .el-menu {
+        width: 100%;
+      }
+    }
+    .home-wrapper{
+      .home-container{
+        .content-wrapper{
+          width: 100% !important;
+          .app-main{
+            width: 100%;
+            display: block;
+            .mixin-components-container {
+              .image-container{
+                .el-card {
+                  width: 100%;
+                  max-width: 100%;
+                  margin: 0;
+                  .el-image {
+                    height: 500px;
+                  }
+                }
+              }
+            }
+          }
+          .app-sidebar{
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 480px) {
+  .page-wrapper {
+    .home-menu {
+      .el-menu {
+        .el-avatar {
+          display: none;
+        }
+      }
+    }
+  }
+}
