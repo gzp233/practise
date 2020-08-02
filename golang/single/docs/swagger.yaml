@@ -1,0 +1,519 @@
+basePath: /
+definitions:
+  api.authForm:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  app.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
+  v1.addPermissionForm:
+    properties:
+      method:
+        type: string
+      name:
+        type: string
+      parent_id:
+        type: integer
+      path:
+        type: string
+      type:
+        type: string
+    type: object
+  v1.addRoleForm:
+    properties:
+      name:
+        type: string
+      permission_ids:
+        items:
+          type: integer
+        type: array
+    type: object
+  v1.addUserForm:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      role_ids:
+        items:
+          type: integer
+        type: array
+      social_id:
+        type: string
+      social_type:
+        type: string
+      username:
+        type: string
+    type: object
+  v1.editPermissionForm:
+    properties:
+      id:
+        type: integer
+      method:
+        type: string
+      name:
+        type: string
+      parent_id:
+        type: integer
+      path:
+        type: string
+      type:
+        type: string
+    type: object
+  v1.editRoleForm:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      permission_ids:
+        items:
+          type: integer
+        type: array
+    type: object
+  v1.editUserForm:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      role_ids:
+        items:
+          type: integer
+        type: array
+      social_id:
+        type: string
+      social_type:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:6628
+info:
+  contact:
+    email: 2627427007@qq.com
+    name: jilu
+    url: https://github.com/gzp199301
+  description: single
+  license:
+    name: MIT
+    url: https://github.com/gzp199301/single/blob/master/LICENSE
+  title: single
+  version: "0.1"
+paths:
+  /api/v1/permissions:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get permission list
+      tags:
+      - permissions
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: required
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/v1.addPermissionForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: add a permission
+      tags:
+      - permissions
+  /api/v1/permissions/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: permission Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: delete a permission
+      tags:
+      - permissions
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: permission Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: editPermissionForm
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/v1.editPermissionForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: update a permission
+      tags:
+      - permissions
+  /api/v1/permissions/tree:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get permission tree
+      tags:
+      - permissions
+  /api/v1/roles:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get role list
+      tags:
+      - roles
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: name is required
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/v1.addRoleForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: add a role
+      tags:
+      - roles
+  /api/v1/roles/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: role Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: delete a role
+      tags:
+      - roles
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: role Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: id and name is required
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/v1.editRoleForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: update a role
+      tags:
+      - roles
+  /api/v1/roles/all:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get all roles
+      tags:
+      - roles
+  /api/v1/userInfo:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user info
+      tags:
+      - auth
+  /api/v1/users:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get user list
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Email, Username and password is required
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/v1.addUserForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: add a user
+      tags:
+      - users
+  /api/v1/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: user Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: delete a user
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: user Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Email, Username and password is required
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/v1.editUserForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: update a user
+      tags:
+      - users
+  /auth:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Email and password is required
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.authForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: Get Auth
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
