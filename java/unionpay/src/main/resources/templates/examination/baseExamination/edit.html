@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="admin/common/html/tableHead :: tableHead(~{::title},~{::link},~{::style})">
+
+    <title th:text=${title}></title>
+    <!-- 这儿引用单独的css link -->
+    <!-- Ladda for Bootstrap 3按钮加载进度插件 -->
+    <link rel="stylesheet" th:href="@{/static/admin/assets/js/button/ladda/ladda.min.css}">
+    <!-- bootstrap-table表单样式 -->
+    <link th:href="@{/static/admin/assets/js/bootstrap/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet"/>
+
+    <!-- 用户界面自定义css -->
+    <link th:href="@{/static/admin/user/css/user-add.css}" rel="stylesheet"/>
+
+    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"></script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <style type="text/css">
+             .checkoutNew{
+		float:left;
+		margin-right:20px;
+	}
+    </style>
+
+</head>
+
+<body>
+
+<div class="content-wrap">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="nest" id="elementClose">
+                <div class="">
+                </div>
+                <div class="body-nest" id="element">
+                    <div class="panel-body">
+                        <form class="form-horizontal m" id="form-edit" th:object="${BaseExamination}">
+                            <input id="id" name="id" type="hidden" th:field="*{id}"/>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label ">体检套餐：</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="text" id="examinationName" name="examinationName"
+                                           th:value="*{examinationName}"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label ">所属医院：</label>
+                                <div class="col-sm-8">
+
+                                    <select class="form-control" id="hospitalId" name="hospitalId"
+                                            th:field="*{hospitalId}">
+                                        <option th:each="t : ${baseHospitalList}" th:value="${t.id}"
+                                                th:text="${t.hospitalName}"></option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label ">可预约数量：</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="text" id="num" name="num" th:value="*{num}"/>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label ">开始时间：</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control MyDate" type="text" id="startTime" name="startTime"
+                                           th:value="*{startTime}"/>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label ">结束时间：</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control MyDate" type="text" id="endTime" name="endTime"
+                                           th:value="*{endTime}"/>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label ">套餐内容：</label>
+                                <div class="col-sm-8">
+                                    <div th:each="t : ${baseExaminationItemList}"
+                                         class="checkbox checkbox-primary checkoutNew">
+                                        <input th:id="${t.id}" class="sqcheckbox" name="itemIds" th:value="${t.id}" th:checked="${t.ischeck}"
+                                               type="checkbox">
+                                        <label th:for="${t.id}" th:text="${t.itemName}"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-control-static col-sm-offset-9">
+                                    <button type="submit" class="btn btn-primary">提交</button>
+                                    <button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 通用js -->
+<div th:include="admin/common/html/js :: onload_js">
+
+</div>
+<!-- bootstarp 表格 -->
+<script th:src="@{/static/admin/assets/js/bootstrap/js/bootstrap-table/bootstrap-table.min.js}"
+        type="text/javascript"></script>
+<script th:src="@{/static/admin/assets/js/bootstrap/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}"
+        type="text/javascript"></script>
+<script th:src="@{/static/admin/assets/js/bootstrap/js/base_list.js}" type="text/javascript"></script>
+
+
+<!-- 弹窗 -->
+<script th:src="@{/static/admin/assets/js/layer/layer.js}" type="text/javascript"></script>
+<!-- 遮罩层 -->
+<script th:src="@{/static/admin/assets/js/blockUI/jquery.blockUI.js}" type="text/javascript"></script>
+<!--ueditor的配置文件-->
+<script type="text/javascript" charset="utf-8" th:src="@{/static/admin//ueditor/ueditor.config.js}"></script>
+<!--ueditor核心文件-->
+<script type="text/javascript" charset="utf-8" th:src="@{/static/admin//ueditor/ueditor.all.min.js}"></script>
+<!--ueditor语言文件-->
+<script type="text/javascript" charset="utf-8" th:src="@{/static/admin//ueditor/lang/zh-cn/zh-cn.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        $(".MyDate").datetimepicker({
+            format: "yyyy-mm-dd",
+            startDate: new Date(),
+            autoclose: true,
+            todayBtn: true,
+            language: 'zh-CN',
+            minuteStep: 2,
+            initialDate: new Date(),
+            minView: 2
+        });
+
+        var x = window.rootPath;
+        var ue = UE.getEditor('editor');
+        var baseExamination = [[${BaseExamination}]];
+        ue.ready(function () {
+            ue.setContent(baseExamination.intro, false)
+        });
+
+    })
+
+
+    $("#form-edit").validate({
+        submitHandler: function (form) {
+            edit();
+        }
+    });
+
+    function edit() {
+        var dataFormJson = $("#form-edit").serialize();
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: rootPath + "/BaseExaminationController/edit",
+            data: dataFormJson,
+            async: false,
+            error: function (request) {
+                $.modal.alertError("系统错误");
+            },
+            success: function (data) {
+                $.operate.saveSuccess(data);
+            }
+        });
+    }
+</script>
+</body>
+
+
+</html>

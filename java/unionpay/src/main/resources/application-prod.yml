@@ -1,0 +1,92 @@
+#线上数据库环境
+spring :
+  datasource :
+      driverClassName : com.mysql.jdbc.Driver
+      url: jdbc:mysql://rm-bp1j312fra7zs5szcko.mysql.rds.aliyuncs.com:3306/nanjing?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
+      username: unionpay
+      password: unionPay123
+      hikari:
+        maxLifetime: 1765000
+        maximumPoolSize: 15
+      # druid连接池配置
+      druid:
+        #JDBC配置
+        url: ${spring.datasource.url}
+        username: ${spring.datasource.username}
+        password: ${spring.datasource.password}
+        driver-class-name: ${spring.datasource.driverClassName}
+        #连接池配置
+        initial-size: 10
+        max-active: 50
+        min-idle: 10
+        max-wait: 5000
+        pool-prepared-statements: true #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
+        max-pool-prepared-statement-per-connection-size: 20
+        validation-query: SELECT 1 FROM DUAL
+        validation-query-timeout: 20000
+        test-on-borrow: false #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+        test-on-return: false #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+        test-while-idle: true #建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+        time-between-eviction-runs-millis: 60000 #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        min-evictable-idle-time-millis: 300000  #一个连接在池中最小生存的时间，单位是毫秒
+        # StatViewServlet配置。（因为暴露的监控信息比较敏感，支持密码加密和访问ip限定）
+        stat-view-servlet:
+          enabled: true
+          url-pattern: /druid/*
+          login-username: admin
+          login-password: admin
+        filter:
+          stat:
+            log-slow-sql: true
+            slow-sql-millis: 1000
+            merge-sql: true
+          wall:
+            config:
+              multi-statement-allow: true
+  redis:
+    isRedisSession: true
+    host: unionpay_redis
+    port: 6379
+    # 连接超时时间（记得添加单位，Duration）
+    timeout: 10000ms
+    #数据超期时间
+    expiretime: 100000
+    # Redis默认情况下有16个分片，这里配置具体使用的分片
+    # database: 0
+    lettuce:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制） 默认 8
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
+        max-wait: -1ms
+        # 连接池中的最大空闲连接 默认 8
+        max-idle: 8
+        # 连接池中的最小空闲连接 默认 0
+        min-idle: 0
+
+
+unionpay :
+  appId: 1552e89812a44346a78f8c7034fd27b8
+  secret: f9dedfaf77ae4f97bbe9f836fbd1bb55
+  #获取backendTokenUrl
+  getBackendTokenUrl: https://open.95516.com/open/access/1.0/backendToken
+  #获取accessTokenUrl
+  getAccessTokenUrl: https://open.95516.com/open/access/1.0/token
+  #获取frontTokenUrl
+  getFrontTokenUrl: https://open.95516.com/open/access/1.0/frontToken
+  #行业卡操作
+  putIndustryCardUrl: https://open.95516.com/open/access/1.0/putIndustryCard
+  #用户校验地址
+  validateUserUrl: http://180.169.111.158:8081/gateway/prod.do
+  #行业卡ID
+  cardModuleId: ZHHQ
+  #行业卡子类型
+  cardSubTp: ZHHQ01
+  #获取code的回调地址
+  backUrl: http://www.gather7.cn:8080/unionpay/getUnionpayCode
+
+  # 信息同步接口
+  userSynUrl: http://101.231.114.225:13100/bioauth-core-access-web/peopleBank/userSyn
+  #用户关闭接口
+  closeSerUrl: http://101.231.114.225:13100/bioauth-core-access-web/peopleBank/closeSer
+

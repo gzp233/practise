@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="admin/common/html/head :: head_Normal(~{::title},~{::link},~{::style})">
+
+    <title th:text=${title}></title>
+    <!-- 这儿引用单独的css link -->
+    <!-- Ladda for Bootstrap 3按钮加载进度插件 -->
+    <link rel="stylesheet" th:href="@{/static/admin/assets/js/button/ladda/ladda.min.css}">
+    <!-- bootstrap-table表单样式 -->
+    <link th:href="@{/static/admin/assets/js/bootstrap/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet"/>
+
+    <style type="text/css">
+        /**
+        *这里写单独的css样式
+        */
+
+    </style>
+
+</head>
+
+<body id="listbody">
+<!-- # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 代码编写处 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # -->
+
+<!-- 右边内容 -->
+<div class="wrap-fluid">
+    <div class="container-fluid paper-wrap bevel tlbr">
+        <!-- 内容 -->
+        <!--标题 通用-->
+        <div th:replace="admin/common/html/title :: title(${title},${parenttitle},${isMsg},${msgHTML})">
+        </div>
+        <!-- 结束标题 通用-->
+        <div class="content-wrap">
+            <!-- 结束内容 -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- END搜索条件 -->
+                    <!-- 空白页开始-->
+                    <div class="nest" id="Blank_PageClose">
+                        <div class="title-alt">
+                            <h6>表单</h6>
+                            <!-- <div class="titleClose">
+                                <a class="gone" href="#Blank_PageClose">
+                                    <span class="entypo-cancel"></span>
+                                </a>
+                            </div> -->
+                            <div class="titleToggle">
+                                <a class="nav-toggle-alt" href="#Blank_Page_Content">
+                                    <span class="entypo-up-open"></span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="body-nest" id="Blank_Page_Content">
+                            <!-- 工具条 end-->
+                            <table id="dataTable" class="table-striped footable-res footable metro-blue"
+                                   data-page-size="6">
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- 空白页结束 -->
+            </div>
+            <!-- 结束内容 -->
+        </div>
+    </div>
+</div>
+<!-- 结束右边内容 -->
+<!-- # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 代码编写处 END# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # -->
+
+
+<!-- 右侧隐藏滑块内容 -->
+<div th:include="admin/common/html/rightHide :: rightHide">
+
+</div>
+<!-- END 右侧隐藏滑块内容-->
+
+<!-- 通用js -->
+<div th:include="admin/common/html/js :: onload_js">
+
+</div>
+<!-- bootstarp 表格 -->
+<script th:src="@{/static/admin/assets/js/bootstrap/js/bootstrap-table/bootstrap-table.min.js}"
+        type="text/javascript"></script>
+<script th:src="@{/static/admin/assets/js/bootstrap/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}"
+        type="text/javascript"></script>
+<script th:src="@{/static/admin/assets/js/bootstrap/js/base_list.js}" type="text/javascript"></script>
+<!-- jquery-export 表格导出插件 -->
+<script th:src="@{/static/admin/assets/js/bootstrap/extensions/export/bootstrap-table-export.js}"
+        type="text/javascript"></script>
+<script th:src="@{/static/admin/assets/js/bootstrap/extensions/export/tableExport.js}" type="text/javascript"></script>
+
+<!-- 弹窗 -->
+<script th:src="@{/static/admin/assets/js/layer/layer.js}" type="text/javascript"></script>
+<!-- 遮罩层 -->
+<script th:src="@{/static/admin/assets/js/blockUI/jquery.blockUI.js}" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+
+    <!-- 导出 -->
+    var dataUrl = window.rootPath + "/BizExaminationOrderController/list";
+    var removeUrl = window.rootPath + "/BizExaminationOrderController/remove";
+    var createUrl = window.rootPath + "/BizExaminationOrderController/add";
+    var updateUrl = window.rootPath + "/BizExaminationOrderController/edit/{id}";
+    var exportUrl = window.rootPath + "/BizExaminationOrderController/export";
+    var options = {
+        dataUrl: dataUrl,
+        createUrl: createUrl,
+        updateUrl: updateUrl,
+        removeUrl: removeUrl,
+        exportUrl: exportUrl,
+        sortName: "roleSort",
+        modalName: "体检预约表",
+        search: false,
+        dataColumns: [
+            {
+                checkbox: true
+            },
+            {
+                field: 'id',
+                title: '主键id',
+                visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'ordCode',
+                title: '订单编码'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'examinationName',
+                title: '体检项目',
+                formatter: function (value, row, index) {
+                    return row.bizExaminationOrdItemList[0].examinationName
+                }
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'hospitalName',
+                title: '医院',
+                formatter: function (value, row, index) {
+                    return row.bizExaminationOrdItemList[0].hospitalName
+                }
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'startTime',
+                title: '体检开始时间',
+                formatter: function (value, row, index) {
+                    return row.bizExaminationOrdItemList[0].startTime
+                }
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'endTime',
+                title: '体检结束时间',
+                formatter: function (value, row, index) {
+                    return row.bizExaminationOrdItemList[0].endTime
+                }
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'ordTime',
+                title: '预定时间'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'finishTime',
+                title: '完成时间'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'ordEmpId',
+                title: '预定人员id',
+                visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'ordState',
+                title: '订单状态'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'ordSrc',
+                title: '订单来源'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'name',
+                title: '体检人姓名'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'tel',
+                title: '联系电话'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'cardNo',
+                title: '卡号'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'ordMemo',
+                title: '备注',
+                visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'createBy',
+                title: '创建人',
+                visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'createDate',
+                title: '创建时间',
+                visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'updateBy',
+                title: '修改人',
+                visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'updateDate',
+                title: '修改时间',
+                visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'status',
+                title: '1--active,0--inactive',
+                visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+
+            /*
+            参照修改注释
+                    {
+                            field: 'xxstate',
+                            title: 'xx状态',
+                            formatter: function (value, row, index) {
+                                var actions = [];
+                                if(value==0){
+                                     actions.push('<span class="label label-primary">关闭</span>');
+                                }else if(value==1){
+                                     actions.push('<span class="label label-danger">开启</span>');
+                                }
+                                  return actions.join('');
+                             }
+                        }
+            */
+            {
+                title: '操作',
+                formatter: function (value, row, index) {
+                    var id = row.id;
+                    var actions = [];
+                    if (row.ordState === '已预约') {
+                        actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="confirm(\'' + row.id + '\')"><i class="fa fa-edit"></i>确认</a> ');
+                    }
+                    return actions.join('');
+                }
+            }]
+    };
+
+    // 确认
+
+    function confirm(id) {
+        $.modal.confirm("确认要完成该预约吗?", function () {
+            var url = "/BizExaminationOrderController/confirm";
+            var data = {
+                "id": id
+            };
+            $.operate.submit(url, "post", "json", data);
+        })
+    }
+
+    $(function () {
+        var oTab = $.table.oTableInit(options);
+        oTab.Init();
+    })
+</script>
+
+</body>
+
+
+</html>

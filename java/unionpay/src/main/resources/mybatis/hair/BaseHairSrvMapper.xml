@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpdms.mapper.hair.BaseHairSrvMapper">
+    <resultMap id="BaseResultMap" type="com.cpdms.model.hair.BaseHairSrv">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="service_name" jdbcType="VARCHAR" property="serviceName"/>
+        <result column="bhs_dept_id" jdbcType="VARCHAR" property="bhsDeptId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+	  	  	      	id,
+       	  	      	service_name,
+       	  	      	bhs_dept_id,
+       	  	    	  	status
+       	</sql>
+    <select id="selectByExample" parameterType="com.cpdms.model.hair.BaseHairSrvExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from base_hair_srv
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from base_hair_srv
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_hair_srv
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.cpdms.model.hair.BaseHairSrvExample">
+        delete from base_hair_srv
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="com.cpdms.model.hair.BaseHairSrv">
+    insert into base_hair_srv (
+      	  	       id,
+       	  	       service_name,
+       	  	       bhs_dept_id,
+       	  	    	  status
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{serviceName,jdbcType=VARCHAR},
+       	  	      	#{bhsDeptId,jdbcType=VARCHAR},
+       	  	    	  #{status,jdbcType=TINYINT}
+       	    )
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.cpdms.model.hair.BaseHairSrv">
+        insert into base_hair_srv
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="id != null">
+                id,
+            </if>
+
+
+            <if test="serviceName != null">
+                service_name,
+            </if>
+
+            <if test="bhsDeptId != null">
+                bhs_dept_id,
+            </if>
+
+
+            <if test="status != null">
+                status,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceName != null">
+                #{serviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="bhsDeptId != null">
+                #{bhsDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.cpdms.model.hair.BaseHairSrvExample" resultType="java.lang.Long">
+        select count(*) from base_hair_srv
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
+        update base_hair_srv
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.serviceName != null">
+                service_name = #{record.serviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bhsDeptId != null">
+                bhs_dept_id = #{record.bhsDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=TINYINT},
+            </if>
+
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+
+    <update id="updateByExample" parameterType="map">
+        update base_hair_srv
+        set
+        id = #{record.id,jdbcType=VARCHAR},
+        service_name = #{record.serviceName,jdbcType=VARCHAR},
+        bhs_dept_id = #{record.bhsDeptId,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=TINYINT}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.cpdms.model.hair.BaseHairSrv">
+        update base_hair_srv
+        <set>
+            <if test="serviceName != null">
+                service_name = #{serviceName,jdbcType=VARCHAR},
+            </if>
+
+            <if test="bhsDeptId != null">
+                bhs_dept_id = #{bhsDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where
+        id = #{id,jdbcType=VARCHAR}
+
+    </update>
+
+
+    <update id="updateByPrimaryKey" parameterType="com.cpdms.model.hair.BaseHairSrv">
+    update base_hair_srv
+    set
+             	        	    	 			service_name = #{serviceName,jdbcType=VARCHAR},
+             	        	    	 			bhs_dept_id = #{bhsDeptId,jdbcType=VARCHAR},
+		     	        	    	 			status = #{status,jdbcType=TINYINT}
+		     	        where
+            id = #{id,jdbcType=VARCHAR}
+
+  </update>
+
+
+</mapper>

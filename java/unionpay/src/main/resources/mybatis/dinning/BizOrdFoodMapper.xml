@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpdms.mapper.dinning.BizOrdFoodMapper">
+  <resultMap id="BaseResultMap" type="com.cpdms.model.dinning.BizOrdFood">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="ord_id" jdbcType="VARCHAR" property="ordId" />
+    <result column="food_id" jdbcType="VARCHAR" property="foodId" />
+    <result column="bof_dept_id" jdbcType="VARCHAR" property="bofDeptId" />
+    <result column="food_name" jdbcType="VARCHAR" property="foodName" />
+    <result column="img_path" jdbcType="VARCHAR" property="imgPath" />
+    <result column="range_name" jdbcType="VARCHAR" property="rangeName" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="qty" jdbcType="DECIMAL" property="qty" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+<sql id="Base_Column_List">
+	  	  	      	id,
+       	  	      	ord_id,
+       	  	      	food_id,
+       	  	      	bof_dept_id,
+       	  	      	price,
+       	  	      	qty,
+       	  	    	  	seq
+       	</sql>
+  <select id="selectByExample" parameterType="com.cpdms.model.dinning.BizOrdFoodExample" resultMap="BaseResultMap">
+    select bof.price,bf.food_name,img.img_path,btr.range_name,count(bof.qty) as amount
+    <if test="distinct">
+      distinct
+    </if>
+    from biz_ord_food as bof left join base_food as bf on bof.food_id = bf.id
+	LEFT join img_url as img on bf.img_id = img.img_id
+	left join ref_food_time as rft on bof.food_id = rft.food_id
+	left join base_time_range as btr on rft.time_id = btr.id
+	GROUP BY bof.food_id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from biz_ord_food
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from biz_ord_food
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cpdms.model.dinning.BizOrdFoodExample">
+    delete from biz_ord_food
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  
+  <insert id="insert" parameterType="com.cpdms.model.dinning.BizOrdFood">
+    insert into biz_ord_food (
+      	  	       id,
+       	  	       ord_id,
+       	  	       food_id,
+       	  	       bof_dept_id,
+       	  	       price,
+       	  	       qty,
+       	  	    	  seq
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{ordId,jdbcType=VARCHAR},
+       	  	      	#{foodId,jdbcType=VARCHAR},
+       	  	      	#{bofDeptId,jdbcType=VARCHAR},
+       	  	      	#{price,jdbcType=DECIMAL},
+       	  	      	#{qty,jdbcType=DECIMAL},
+       	  	    	  #{seq,jdbcType=INTEGER}
+       	    )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.cpdms.model.dinning.BizOrdFood">
+    insert into biz_ord_food
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+          
+      <if test="id != null">
+        id,
+      </if>
+      
+         
+      <if test="ordId != null">
+        ord_id,
+      </if>
+      
+         
+      <if test="foodId != null">
+        food_id,
+      </if>
+      
+      
+      <if test="bofDeptId != null">
+        bof_dept_id,
+      </if>
+         
+      <if test="price != null">
+        price,
+      </if>
+      
+         
+      <if test="qty != null">
+        qty,
+      </if>
+      
+         
+      <if test="seq != null">
+        seq,
+      </if>
+      
+         </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+          <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+          <if test="ordId != null">
+        #{ordId,jdbcType=VARCHAR},
+      </if>
+          <if test="foodId != null">
+        #{foodId,jdbcType=VARCHAR},
+      </if>
+      	  <if test="bofDeptId != null">
+        #{bofDeptId,jdbcType=VARCHAR},
+      </if>
+          <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+          <if test="qty != null">
+        #{qty,jdbcType=DECIMAL},
+      </if>
+          <if test="seq != null">
+        #{seq,jdbcType=INTEGER},
+      </if>
+        </trim>
+  </insert>
+  
+  <select id="countByExample" parameterType="com.cpdms.model.dinning.BizOrdFoodExample" resultType="java.lang.Long">
+    select count(*) from biz_ord_food
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  
+  <update id="updateByExampleSelective" parameterType="map">
+    update biz_ord_food
+    <set>
+          <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+          <if test="record.ordId != null">
+        ord_id = #{record.ordId,jdbcType=VARCHAR},
+      </if>
+          <if test="record.foodId != null">
+        food_id = #{record.foodId,jdbcType=VARCHAR},
+      </if>
+      	  <if test="record.bofDeptId != null">
+        bof_dept_id = #{record.bofDeptId,jdbcType=VARCHAR},
+      </if>
+          <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+          <if test="record.qty != null">
+        qty = #{record.qty,jdbcType=DECIMAL},
+      </if>
+          <if test="record.seq != null">
+        seq = #{record.seq,jdbcType=INTEGER},
+      </if>
+         
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  
+  <update id="updateByExample" parameterType="map">
+    update biz_ord_food
+    set
+            	     	 id = #{record.id,jdbcType=VARCHAR},
+    	         	     	 ord_id = #{record.ordId,jdbcType=VARCHAR},
+    	         	     	 food_id = #{record.foodId,jdbcType=VARCHAR},
+    	         	     	 bof_dept_id = #{record.bofDeptId,jdbcType=VARCHAR},
+    	         	     	 price = #{record.price,jdbcType=DECIMAL},
+    	         	     	 qty = #{record.qty,jdbcType=DECIMAL},
+    	         	     	 seq = #{record.seq,jdbcType=INTEGER}
+    	         <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  
+      <update id="updateByPrimaryKeySelective" parameterType="com.cpdms.model.dinning.BizOrdFood">
+    update biz_ord_food
+    <set>
+                          <if test="ordId != null">
+        ord_id = #{ordId,jdbcType=VARCHAR},
+      </if>
+                      <if test="foodId != null">
+        food_id = #{foodId,jdbcType=VARCHAR},
+      </if>
+      				  <if test="bofDeptId != null">
+        bof_dept_id = #{bofDeptId,jdbcType=VARCHAR},
+      </if>
+                      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+                      <if test="qty != null">
+        qty = #{qty,jdbcType=DECIMAL},
+      </if>
+                      <if test="seq != null">
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+              </set>
+    where 
+            id = #{id,jdbcType=VARCHAR}
+                                                  
+  </update>
+
+      	      	   	      	   	      	   	      	   	      	   	      	
+
+  <update id="updateByPrimaryKey" parameterType="com.cpdms.model.dinning.BizOrdFood">
+    update biz_ord_food
+    set 
+             	        	    	 			ord_id = #{ordId,jdbcType=VARCHAR},
+		     	        	    	 			food_id = #{foodId,jdbcType=VARCHAR},
+		     	        	    	 			bof_dept_id = #{bofDeptId,jdbcType=VARCHAR},
+		     	        	    	 			price = #{price,jdbcType=DECIMAL},
+		     	        	    	 			qty = #{qty,jdbcType=DECIMAL},
+		     	        	    	 			seq = #{seq,jdbcType=INTEGER}
+		     	        where 
+            id = #{id,jdbcType=VARCHAR}
+                                                    
+  </update>
+  
+                                  
+</mapper>

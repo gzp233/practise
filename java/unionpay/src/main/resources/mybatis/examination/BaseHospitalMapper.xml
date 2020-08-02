@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpdms.mapper.examination.BaseHospitalMapper">
+    <resultMap id="BaseResultMap" type="com.cpdms.model.examination.BaseHospital">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="hospital_name" jdbcType="VARCHAR" property="hospitalName"/>
+        <result column="bh_dept_id" jdbcType="VARCHAR" property="bhDeptId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+	  	  	      	id,
+       	  	      	hospital_name,
+       	  	      	bh_dept_id,
+       	  	    	  	status
+       	</sql>
+    <select id="selectByExample" parameterType="com.cpdms.model.examination.BaseHospitalExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from base_hospital
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from base_hospital
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_hospital
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.cpdms.model.examination.BaseHospitalExample">
+        delete from base_hospital
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="com.cpdms.model.examination.BaseHospital">
+    insert into base_hospital (
+      	  	       id,
+       	  	       hospital_name,
+       	  	       bh_dept_id,
+       	  	    	  status
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{hospitalName,jdbcType=VARCHAR},
+       	  	      	#{bhDeptId,jdbcType=VARCHAR},
+       	  	    	  #{status,jdbcType=TINYINT}
+       	    )
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.cpdms.model.examination.BaseHospital">
+        insert into base_hospital
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="id != null">
+                id,
+            </if>
+
+
+            <if test="hospitalName != null">
+                hospital_name,
+            </if>
+
+            <if test="bhDeptId != null">
+                bh_dept_id,
+            </if>
+
+
+            <if test="status != null">
+                status,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="hospitalName != null">
+                #{hospitalName,jdbcType=VARCHAR},
+            </if>
+            <if test="bhDeptId != null">
+                #{bhDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.cpdms.model.examination.BaseHospitalExample"
+            resultType="java.lang.Long">
+        select count(*) from base_hospital
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
+        update base_hospital
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.hospitalName != null">
+                hospital_name = #{record.hospitalName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bhDeptId != null">
+                bh_dept_id = #{record.bhDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=TINYINT},
+            </if>
+
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+
+    <update id="updateByExample" parameterType="map">
+        update base_hospital
+        set
+        id = #{record.id,jdbcType=VARCHAR},
+        hospital_name = #{record.hospitalName,jdbcType=VARCHAR},
+        bh_dept_id = #{record.bhDeptId,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=TINYINT}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.cpdms.model.examination.BaseHospital">
+        update base_hospital
+        <set>
+            <if test="hospitalName != null">
+                hospital_name = #{hospitalName,jdbcType=VARCHAR},
+            </if>
+            <if test="bhDeptId != null">
+                bh_dept_id = #{bhDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where
+        id = #{id,jdbcType=VARCHAR}
+
+    </update>
+
+
+    <update id="updateByPrimaryKey" parameterType="com.cpdms.model.examination.BaseHospital">
+    update base_hospital
+    set
+             	        	    	 			hospital_name = #{hospitalName,jdbcType=VARCHAR},
+             	        	    	 			bh_dept_id = #{bhDeptId,jdbcType=VARCHAR},
+		     	        	    	 			status = #{status,jdbcType=TINYINT}
+		     	        where
+            id = #{id,jdbcType=VARCHAR}
+
+  </update>
+
+
+</mapper>

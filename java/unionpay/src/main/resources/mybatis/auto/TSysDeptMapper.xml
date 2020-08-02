@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpdms.mapper.auto.TSysDeptMapper">
+  <resultMap id="tsysDeptMap" type="com.cpdms.model.auto.TSysDept">
+
+    <result property="id" column="id" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result property="deptName" column="dept_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result property="deptCode" column="dept_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result property="deptExtCode" column="dept_ext_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result property="parentId" column="parent_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result property="delFlag" column="del_flag" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    <result property="createBy" column="create_by" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result property="updateBy" column="update_by" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result property="createDate" column="create_date" javaType="java.util.Date" jdbcType="DATE" />
+    <result property="updateDate" column="update_date" javaType="java.util.Date" jdbcType="DATE" />
+  </resultMap>
+  <select id="queryDeptList" parameterType="Map" resultMap="tsysDeptMap">
+        select id, dept_name, dept_code, dept_ext_code, parent_id, del_flag, create_by, create_date, update_by, update_date
+        from t_sys_dept
+        where del_flag = 0
+  </select>
+
+
+<select id="querySubDeptIds" parameterType="String" resultType="String">
+        select id
+        from t_sys_dept
+        where parent_id = #{value}
+        and del_flag = 0
+</select>
+
+  <insert id="insertDept" parameterType="com.cpdms.model.auto.TSysDept">
+insert into t_sys_dept
+(id, dept_name, dept_code, dept_ext_code, parent_id, del_flag, create_by, create_date, update_by, update_date)
+values
+(#{id,jdbcType=VARCHAR},
+#{deptName,jdbcType=VARCHAR},
+#{deptCode,jdbcType=VARCHAR},
+#{deptExtCode,jdbcType=VARCHAR},
+#{parentId,jdbcType=VARCHAR},
+#{delFlag,jdbcType=INTEGER},
+#{createBy,jdbcType=VARCHAR}),
+#{createDate,jdbcType=DATE}),
+#{updateBy,jdbcType=VARCHAR}),
+#{updateDate,jdbcType=DATE})
+  </insert>
+
+</mapper>

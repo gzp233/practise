@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpdms.mapper.dinning.RefFoodTimeMapper">
+  <resultMap id="BaseResultMap" type="com.cpdms.model.dinning.RefFoodTime">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="time_id" jdbcType="VARCHAR" property="timeId" />
+    <result column="food_id" jdbcType="VARCHAR" property="foodId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+<sql id="Base_Column_List">
+	  	  	      	id,
+       	  	      	time_id,
+       	  	    	  	food_id
+       	</sql>
+  <select id="selectByExample" parameterType="com.cpdms.model.dinning.RefFoodTimeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ref_food_time
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ref_food_time
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByFoodId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ref_food_time
+    where food_id = #{foodId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from ref_food_time
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cpdms.model.dinning.RefFoodTimeExample">
+    delete from ref_food_time
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  
+  <delete id="deleteByTimeIdAndFoodId"  parameterType="java.lang.String">
+  	delete from ref_food_time
+    where time_id = #{timeId,jdbcType=VARCHAR} and food_id = #{foodId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.cpdms.model.dinning.RefFoodTime">
+    insert into ref_food_time (
+      	  	       id,
+       	  	       time_id,
+       	  	    	  food_id
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{timeId,jdbcType=VARCHAR},
+       	  	    	  #{foodId,jdbcType=VARCHAR}
+       	    )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.cpdms.model.dinning.RefFoodTime">
+    insert into ref_food_time
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+          
+      <if test="id != null">
+        id,
+      </if>
+      
+         
+      <if test="timeId != null">
+        time_id,
+      </if>
+      
+         
+      <if test="foodId != null">
+        food_id,
+      </if>
+      
+         </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+          <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+          <if test="timeId != null">
+        #{timeId,jdbcType=VARCHAR},
+      </if>
+          <if test="foodId != null">
+        #{foodId,jdbcType=VARCHAR},
+      </if>
+        </trim>
+  </insert>
+  
+  <select id="countByExample" parameterType="com.cpdms.model.dinning.RefFoodTimeExample" resultType="java.lang.Long">
+    select count(*) from ref_food_time
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  
+  <update id="updateByExampleSelective" parameterType="map">
+    update ref_food_time
+    <set>
+          <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+          <if test="record.timeId != null">
+        time_id = #{record.timeId,jdbcType=VARCHAR},
+      </if>
+          <if test="record.foodId != null">
+        food_id = #{record.foodId,jdbcType=VARCHAR},
+      </if>
+         
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  
+  <update id="updateByExample" parameterType="map">
+    update ref_food_time
+    set
+            	     	 id = #{record.id,jdbcType=VARCHAR},
+    	         	     	 time_id = #{record.timeId,jdbcType=VARCHAR},
+    	         	     	 food_id = #{record.foodId,jdbcType=VARCHAR}
+    	         <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  
+      <update id="updateByPrimaryKeySelective" parameterType="com.cpdms.model.dinning.RefFoodTime">
+    update ref_food_time
+    <set>
+                          <if test="timeId != null">
+        time_id = #{timeId,jdbcType=VARCHAR},
+      </if>
+                      <if test="foodId != null">
+        food_id = #{foodId,jdbcType=VARCHAR},
+      </if>
+              </set>
+    where 
+            id = #{id,jdbcType=VARCHAR}
+                          
+  </update>
+
+      	      	   	      	   	      	
+
+  <update id="updateByPrimaryKey" parameterType="com.cpdms.model.dinning.RefFoodTime">
+    update ref_food_time
+    set 
+             	        	    	 			time_id = #{timeId,jdbcType=VARCHAR},
+		     	        	    	 			food_id = #{foodId,jdbcType=VARCHAR}
+		     	        where 
+            id = #{id,jdbcType=VARCHAR}
+                            
+  </update>
+  
+                   
+</mapper>

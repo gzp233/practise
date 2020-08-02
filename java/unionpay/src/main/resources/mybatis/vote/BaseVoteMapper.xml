@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpdms.mapper.vote.BaseVoteMapper">
+    <resultMap id="BaseResultMap" type="com.cpdms.model.vote.BaseVote">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="vote_name" jdbcType="VARCHAR" property="voteName"/>
+        <result column="vote_type" jdbcType="TINYINT" property="voteType"/>
+        <result column="vote_desc" jdbcType="VARCHAR" property="voteDesc"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="vote_status" jdbcType="VARCHAR" property="voteStatus"/>
+        <result column="bv_dept_id" jdbcType="VARCHAR" property="bvDeptId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="num" jdbcType="INTEGER" property="num"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+    </resultMap>
+
+    <resultMap id="otherResultMap" type="com.cpdms.model.vote.BaseVote">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="vote_name" jdbcType="VARCHAR" property="voteName"/>
+        <result column="vote_type" jdbcType="TINYINT" property="voteType"/>
+        <result column="vote_desc" jdbcType="VARCHAR" property="voteDesc"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="vote_status" jdbcType="VARCHAR" property="voteStatus"/>
+        <result column="bv_dept_id" jdbcType="VARCHAR" property="bvDeptId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="num" jdbcType="INTEGER" property="num"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <collection property="baseVoteItemList" ofType="itemResult" javaType="ArrayList" column="id" select="getItems"/>
+    </resultMap>
+
+    <resultMap id="itemResult" type="com.cpdms.model.vote.BaseVoteItem">
+        <result property="itemName" column="item_name"/>
+        <result property="num" column="num"/>
+        <result property="id" column="id"/>
+    </resultMap>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+	  	  	      	id,
+       	  	      	vote_name,
+       	  	      	vote_type,
+       	  	      	vote_desc,
+       	  	      	start_time,
+       	  	      	end_time,
+       	  	      	vote_status,
+       	  	      	bv_dept_id,
+       	  	      	status,
+       	  	      	num,
+       	  	      	create_by,
+       	  	      	create_date,
+       	  	      	update_by,
+       	  	    	  	update_date
+       	</sql>
+    <select id="selectByExample" parameterType="com.cpdms.model.vote.BaseVoteExample" resultMap="otherResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from base_vote
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="otherResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from base_vote
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_vote
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.cpdms.model.vote.BaseVoteExample">
+        delete from base_vote
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="com.cpdms.model.vote.BaseVote">
+    insert into base_vote (
+      	  	       id,
+       	  	       vote_name,
+       	  	       vote_type,
+       	  	       vote_desc,
+       	  	       start_time,
+       	  	       end_time,
+       	  	       vote_status,
+       	  	       bv_dept_id,
+       	  	       status,
+       	  	       num,
+       	  	       create_by,
+       	  	       create_date,
+       	  	       update_by,
+       	  	    	  update_date
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{voteName,jdbcType=VARCHAR},
+       	  	      	#{voteType,jdbcType=TINYINT},
+       	  	      	#{voteDesc,jdbcType=VARCHAR},
+       	  	      	#{startTime,jdbcType=TIMESTAMP},
+       	  	      	#{endTime,jdbcType=TIMESTAMP},
+       	  	      	#{voteStatus,jdbcType=VARCHAR},
+       	  	      	#{bvDeptId,jdbcType=VARCHAR},
+       	  	      	#{status,jdbcType=TINYINT},
+       	  	      	#{num,jdbcType=INTEGER},
+       	  	      	#{createBy,jdbcType=VARCHAR},
+       	  	      	#{createDate,jdbcType=TIMESTAMP},
+       	  	      	#{updateBy,jdbcType=VARCHAR},
+       	  	    	  #{updateDate,jdbcType=TIMESTAMP}
+       	    )
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.cpdms.model.vote.BaseVote">
+        insert into base_vote
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="id != null">
+                id,
+            </if>
+
+
+            <if test="voteName != null">
+                vote_name,
+            </if>
+
+
+            <if test="voteType != null">
+                vote_type,
+            </if>
+
+
+            <if test="voteDesc != null">
+                vote_desc,
+            </if>
+
+
+            <if test="startTime != null">
+                start_time,
+            </if>
+
+
+            <if test="endTime != null">
+                end_time,
+            </if>
+
+
+            <if test="voteStatus != null">
+                vote_status,
+            </if>
+            <if test="bvDeptId != null">
+                bv_dept_id,
+            </if>
+
+
+            <if test="status != null">
+                status,
+            </if>
+
+            <if test="num != null">
+                num,
+            </if>
+
+
+            <if test="createBy != null">
+                create_by,
+            </if>
+
+
+            <if test="createDate != null">
+                create_date,
+            </if>
+
+
+            <if test="updateBy != null">
+                update_by,
+            </if>
+
+
+            <if test="updateDate != null">
+                update_date,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="voteName != null">
+                #{voteName,jdbcType=VARCHAR},
+            </if>
+            <if test="voteType != null">
+                #{voteType,jdbcType=TINYINT},
+            </if>
+            <if test="voteDesc != null">
+                #{voteDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="voteStatus != null">
+                #{voteStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="bvDeptId != null">
+                #{bvDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="num != null">
+                #{num,jdbcType=INTEGER},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.cpdms.model.vote.BaseVoteExample" resultType="java.lang.Long">
+        select count(*) from base_vote
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
+        update base_vote
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.voteName != null">
+                vote_name = #{record.voteName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.voteType != null">
+                vote_type = #{record.voteType,jdbcType=TINYINT},
+            </if>
+            <if test="record.voteDesc != null">
+                vote_desc = #{record.voteDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="record.startTime != null">
+                start_time = #{record.startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.endTime != null">
+                end_time = #{record.endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.voteStatus != null">
+                vote_status = #{record.voteStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bvDeptId != null">
+                bv_dept_id = #{record.bvDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=TINYINT},
+            </if>
+            <if test="record.num != null">
+                num = #{record.num,jdbcType=INTEGER},
+            </if>
+            <if test="record.createBy != null">
+                create_by = #{record.createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createDate != null">
+                create_date = #{record.createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateBy != null">
+                update_by = #{record.updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="record.updateDate != null">
+                update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+            </if>
+
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+
+    <update id="updateByExample" parameterType="map">
+        update base_vote
+        set
+        id = #{record.id,jdbcType=VARCHAR},
+        vote_name = #{record.voteName,jdbcType=VARCHAR},
+        vote_type = #{record.voteType,jdbcType=TINYINT},
+        vote_desc = #{record.voteDesc,jdbcType=VARCHAR},
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+        vote_status = #{record.voteStatus,jdbcType=VARCHAR},
+        bv_dept_id = #{record.bvDeptId,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=TINYINT},
+        num = #{record.num,jdbcType=TINYINT},
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.cpdms.model.vote.BaseVote">
+        update base_vote
+        <set>
+            <if test="voteName != null">
+                vote_name = #{voteName,jdbcType=VARCHAR},
+            </if>
+            <if test="voteType != null">
+                vote_type = #{voteType,jdbcType=TINYINT},
+            </if>
+            <if test="voteDesc != null">
+                vote_desc = #{voteDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="voteStatus != null">
+                vote_status = #{voteStatus,jdbcType=VARCHAR},
+            </if>
+
+            <if test="bvDeptId != null">
+                bv_dept_id = #{bvDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="num != null">
+                num = #{num,jdbcType=TINYINT},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where
+        id = #{id,jdbcType=VARCHAR}
+
+    </update>
+
+
+    <update id="updateByPrimaryKey" parameterType="com.cpdms.model.vote.BaseVote">
+    update base_vote
+    set
+             	        	    	 			vote_name = #{voteName,jdbcType=VARCHAR},
+		     	        	    	 			vote_type = #{voteType,jdbcType=TINYINT},
+		     	        	    	 			vote_desc = #{voteDesc,jdbcType=VARCHAR},
+		     	        	    	 			start_time = #{startTime,jdbcType=TIMESTAMP},
+		     	        	    	 			end_time = #{endTime,jdbcType=TIMESTAMP},
+		     	        	    	 			vote_status = #{voteStatus,jdbcType=VARCHAR},
+		     	        	    	 			bv_dept_id = #{bvDeptId,jdbcType=VARCHAR},
+		     	        	    	 			status = #{status,jdbcType=TINYINT},
+		     	        	    	 			num = #{num,jdbcType=TINYINT},
+		     	        	    	 			create_by = #{createBy,jdbcType=VARCHAR},
+		     	        	    	 			create_date = #{createDate,jdbcType=TIMESTAMP},
+		     	        	    	 			update_by = #{updateBy,jdbcType=VARCHAR},
+		     	        	    	 			update_date = #{updateDate,jdbcType=TIMESTAMP}
+		     	        where
+            id = #{id,jdbcType=VARCHAR}
+
+  </update>
+
+    <select id="getItems" resultMap="itemResult" parameterType="string">
+      select id,item_name,num from base_vote_item where vote_id=#{id}
+    </select>
+
+    <update id="increaseNum" parameterType="java.lang.String">
+        update base_vote set num=num+1 where id=#{id}
+    </update>
+
+    <update id="decreaseNum" parameterType="java.lang.String">
+        update base_vote set num=num-1 where id=#{id}
+    </update>
+</mapper>

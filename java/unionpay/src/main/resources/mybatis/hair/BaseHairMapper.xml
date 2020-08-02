@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpdms.mapper.hair.BaseHairMapper">
+    <resultMap id="BaseResultMap" type="com.cpdms.model.hair.BaseHair">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="hair_name" jdbcType="VARCHAR" property="hairName"/>
+        <result column="hair_type" jdbcType="TINYINT" property="hairType"/>
+        <result column="hair_price" jdbcType="DECIMAL" property="hairPrice"/>
+        <result column="img_id" jdbcType="VARCHAR" property="imgId"/>
+        <result column="service_id" jdbcType="VARCHAR" property="serviceId"/>
+        <result column="hair_desc" jdbcType="VARCHAR" property="hairDesc"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="bh_dept_id" jdbcType="VARCHAR" property="bhDeptId"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <association property="baseHairSrv" javaType="com.cpdms.model.hair.BaseHairSrv">
+            <result property="serviceName" column="service_name"/>
+        </association>
+        <collection property="imgs" ofType="com.cpdms.model.dinning.ImgUrl">
+            <result property="imgPath" column="img_path"/>
+            <result property="thumbImgPath" column="thumb_img_path"/>
+        </collection>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+	  	  	      	id,
+       	  	      	hair_name,
+       	  	      	hair_type,
+       	  	      	hair_price,
+       	  	      	img_id,
+       	  	      	service_id,
+       	  	      	hair_desc,
+       	  	      	status,
+       	  	      	create_by,
+       	  	      	bh_dept_id,
+       	  	      	create_date,
+       	  	      	update_by,
+       	  	    	  	update_date
+       	</sql>
+    <select id="selectByExample" parameterType="com.cpdms.model.hair.BaseHairExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from base_hair
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from base_hair
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_hair
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.cpdms.model.hair.BaseHairExample">
+        delete from base_hair
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="com.cpdms.model.hair.BaseHair">
+    insert into base_hair (
+      	  	       id,
+       	  	       hair_name,
+       	  	       hair_type,
+       	  	       hair_price,
+       	  	       img_id,
+       	  	       service_id,
+       	  	       hair_desc,
+       	  	       status,
+       	  	       create_by,
+       	  	       bh_dept_id,
+       	  	       create_date,
+       	  	       update_by,
+       	  	    	  update_date
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{hairName,jdbcType=VARCHAR},
+       	  	      	#{hairType,jdbcType=TINYINT},
+       	  	      	#{hairPrice,jdbcType=DECIMAL},
+       	  	      	#{imgId,jdbcType=VARCHAR},
+       	  	      	#{serviceId,jdbcType=VARCHAR},
+       	  	      	#{hairDesc,jdbcType=VARCHAR},
+       	  	      	#{status,jdbcType=TINYINT},
+       	  	      	#{createBy,jdbcType=VARCHAR},
+       	  	      	#{bhDeptId,jdbcType=VARCHAR},
+       	  	      	#{createDate,jdbcType=TIMESTAMP},
+       	  	      	#{updateBy,jdbcType=VARCHAR},
+       	  	    	  #{updateDate,jdbcType=TIMESTAMP}
+       	    )
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.cpdms.model.hair.BaseHair">
+        insert into base_hair
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="id != null">
+                id,
+            </if>
+
+
+            <if test="hairName != null">
+                hair_name,
+            </if>
+
+
+            <if test="hairType != null">
+                hair_type,
+            </if>
+
+
+            <if test="hairPrice != null">
+                hair_price,
+            </if>
+
+
+            <if test="imgId != null">
+                img_id,
+            </if>
+            <if test="serviceId != null">
+                service_id,
+            </if>
+
+
+            <if test="hairDesc != null">
+                hair_desc,
+            </if>
+
+
+            <if test="status != null">
+                status,
+            </if>
+
+
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="bhDeptId != null">
+                bh_dept_id,
+            </if>
+
+
+            <if test="createDate != null">
+                create_date,
+            </if>
+
+
+            <if test="updateBy != null">
+                update_by,
+            </if>
+
+
+            <if test="updateDate != null">
+                update_date,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="hairName != null">
+                #{hairName,jdbcType=VARCHAR},
+            </if>
+            <if test="hairType != null">
+                #{hairType,jdbcType=TINYINT},
+            </if>
+            <if test="hairPrice != null">
+                #{hairPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="imgId != null">
+                #{imgId,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceId != null">
+                #{serviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="hairDesc != null">
+                #{hairDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="bhDeptId != null">
+                #{bhDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.cpdms.model.hair.BaseHairExample" resultType="java.lang.Long">
+        select count(*) from base_hair
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
+        update base_hair
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.hairName != null">
+                hair_name = #{record.hairName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.hairType != null">
+                hair_type = #{record.hairType,jdbcType=TINYINT},
+            </if>
+            <if test="record.hairPrice != null">
+                hair_price = #{record.hairPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="record.imgId != null">
+                img_id = #{record.imgId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.serviceId != null">
+                service_id = #{record.serviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.hairDesc != null">
+                hair_desc = #{record.hairDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=TINYINT},
+            </if>
+            <if test="record.createBy != null">
+                create_by = #{record.createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bhDeptId != null">
+                bh_dept_id = #{record.bhDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createDate != null">
+                create_date = #{record.createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateBy != null">
+                update_by = #{record.updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="record.updateDate != null">
+                update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+            </if>
+
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+
+    <update id="updateByExample" parameterType="map">
+        update base_hair
+        set
+        id = #{record.id,jdbcType=VARCHAR},
+        hair_name = #{record.hairName,jdbcType=VARCHAR},
+        hair_type = #{record.hairType,jdbcType=TINYINT},
+        hair_price = #{record.hairPrice,jdbcType=DECIMAL},
+        img_id = #{record.imgId,jdbcType=VARCHAR},
+        service_id = #{record.serviceId,jdbcType=VARCHAR},
+        hair_desc = #{record.hairDesc,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=TINYINT},
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+        bh_dept_id = #{record.bhDeptId,jdbcType=VARCHAR},
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.cpdms.model.hair.BaseHair">
+        update base_hair
+        <set>
+            <if test="hairName != null">
+                hair_name = #{hairName,jdbcType=VARCHAR},
+            </if>
+            <if test="hairType != null">
+                hair_type = #{hairType,jdbcType=TINYINT},
+            </if>
+            <if test="hairPrice != null">
+                hair_price = #{hairPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="imgId != null">
+                img_id = #{imgId,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceId != null">
+                service_id = #{serviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="hairDesc != null">
+                hair_desc = #{hairDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="bhDeptId != null">
+                bh_dept_id = #{bhDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where
+        id = #{id,jdbcType=VARCHAR}
+
+    </update>
+
+
+    <update id="updateByPrimaryKey" parameterType="com.cpdms.model.hair.BaseHair">
+    update base_hair
+    set
+             	        	    	 			hair_name = #{hairName,jdbcType=VARCHAR},
+		     	        	    	 			hair_type = #{hairType,jdbcType=TINYINT},
+		     	        	    	 			hair_price = #{hairPrice,jdbcType=DECIMAL},
+		     	        	    	 			img_id = #{imgId,jdbcType=VARCHAR},
+		     	        	    	 			service_id = #{serviceId,jdbcType=VARCHAR},
+		     	        	    	 			hair_desc = #{hairDesc,jdbcType=VARCHAR},
+		     	        	    	 			status = #{status,jdbcType=TINYINT},
+		     	        	    	 			create_by = #{createBy,jdbcType=VARCHAR},
+		     	        	    	 			bh_dept_id = #{bhDeptId,jdbcType=VARCHAR},
+		     	        	    	 			create_date = #{createDate,jdbcType=TIMESTAMP},
+		     	        	    	 			update_by = #{updateBy,jdbcType=VARCHAR},
+		     	        	    	 			update_date = #{updateDate,jdbcType=TIMESTAMP}
+		     	        where
+            id = #{id,jdbcType=VARCHAR}
+
+  </update>
+
+    <select id="selectHairAndImgs" parameterType="com.cpdms.model.hair.BaseHair" resultMap="BaseResultMap">
+        select a.*, b.img_path,b.thumb_img_path,c.service_name from base_hair a left join img_url b ON a.img_id =
+        b.img_id left join base_hair_srv c on a.service_id=c.id WHERE a.STATUS=1
+        <if test="hairName != null and hairName != ''">and a.hair_name=#{hairName}</if>
+        <if test="hairType != null and hairType != ''">and a.hair_type=#{hairType}</if>
+        <if test="serviceId != null and serviceId != ''">and a.service_id=#{serviceId}</if>
+        order by a.create_date desc
+    </select>
+
+    <select id="selectOne" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    a.*,b.img_path,b.thumb_img_path
+    from base_hair a left join img_url b on a.img_id=b.img_id left join base_hair_srv c on a.service_id=c.id
+    where a.id = #{id,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

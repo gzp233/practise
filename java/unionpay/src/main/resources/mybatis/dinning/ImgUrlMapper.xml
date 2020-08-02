@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpdms.mapper.dinning.ImgUrlMapper">
+  <resultMap id="BaseResultMap" type="com.cpdms.model.dinning.ImgUrl">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="img_id" jdbcType="VARCHAR" property="imgId" />
+    <result column="img_path" jdbcType="VARCHAR" property="imgPath" />
+    <result column="thumb_img_path" jdbcType="VARCHAR" property="thumbImgPath" />
+    <result column="img_seq" jdbcType="INTEGER" property="imgSeq" />
+    <result column="upload_by" jdbcType="VARCHAR" property="uploadBy" />
+    <result column="upload_date" jdbcType="TIMESTAMP" property="uploadDate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+<sql id="Base_Column_List">
+	  	  	      	id,
+       	  	      	img_id,
+       	  	      	img_path,
+       	  	      	thumb_img_path,
+       	  	      	img_seq,
+       	  	      	upload_by,
+       	  	    	  	upload_date
+       	</sql>
+  <select id="selectByExample" parameterType="com.cpdms.model.dinning.ImgUrlExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from img_url
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from img_url
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from img_url
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cpdms.model.dinning.ImgUrlExample">
+    delete from img_url
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.cpdms.model.dinning.ImgUrl">
+    insert into img_url (
+      	  	       id,
+       	  	       img_id,
+       	  	       img_path,
+       	  	       thumb_img_path,
+       	  	       img_seq,
+       	  	       upload_by,
+       	  	    	  upload_date
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{imgId,jdbcType=VARCHAR},
+       	  	      	#{imgPath,jdbcType=VARCHAR},
+       	  	      	#{thumbImgPath,jdbcType=VARCHAR},
+       	  	      	#{imgSeq,jdbcType=INTEGER},
+       	  	      	#{uploadBy,jdbcType=VARCHAR},
+       	  	    	  #{uploadDate,jdbcType=TIMESTAMP}
+       	    )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.cpdms.model.dinning.ImgUrl">
+    insert into img_url
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+
+      <if test="id != null">
+        id,
+      </if>
+
+
+      <if test="imgId != null">
+        img_id,
+      </if>
+
+
+      <if test="imgPath != null">
+        img_path,
+      </if>
+        <if test="thumbImgPath != null">
+        thumb_img_path,
+      </if>
+
+
+      <if test="imgSeq != null">
+        img_seq,
+      </if>
+
+
+      <if test="uploadBy != null">
+        upload_by,
+      </if>
+
+
+      <if test="uploadDate != null">
+        upload_date,
+      </if>
+
+         </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+          <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+          <if test="imgId != null">
+        #{imgId,jdbcType=VARCHAR},
+      </if>
+          <if test="imgPath != null">
+        #{imgPath,jdbcType=VARCHAR},
+      </if>
+           <if test="thumbImgPath != null">
+        #{thumbImgPath,jdbcType=VARCHAR},
+      </if>
+          <if test="imgSeq != null">
+        #{imgSeq,jdbcType=INTEGER},
+      </if>
+          <if test="uploadBy != null">
+        #{uploadBy,jdbcType=VARCHAR},
+      </if>
+          <if test="uploadDate != null">
+        #{uploadDate,jdbcType=TIMESTAMP},
+      </if>
+        </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.cpdms.model.dinning.ImgUrlExample" resultType="java.lang.Long">
+    select count(*) from img_url
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update img_url
+    <set>
+          <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+          <if test="record.imgId != null">
+        img_id = #{record.imgId,jdbcType=VARCHAR},
+      </if>
+          <if test="record.imgPath != null">
+        img_path = #{record.imgPath,jdbcType=VARCHAR},
+      </if>
+          <if test="record.thumbImgPath != null">
+        thumb_img_path = #{record.thumbImgPath,jdbcType=VARCHAR},
+      </if>
+          <if test="record.imgSeq != null">
+        img_seq = #{record.imgSeq,jdbcType=INTEGER},
+      </if>
+          <if test="record.uploadBy != null">
+        upload_by = #{record.uploadBy,jdbcType=VARCHAR},
+      </if>
+          <if test="record.uploadDate != null">
+        upload_date = #{record.uploadDate,jdbcType=TIMESTAMP},
+      </if>
+
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+
+  <update id="updateByExample" parameterType="map">
+    update img_url
+    set
+            	     	 id = #{record.id,jdbcType=VARCHAR},
+    	         	     	 img_id = #{record.imgId,jdbcType=VARCHAR},
+    	         	     	 img_path = #{record.imgPath,jdbcType=VARCHAR},
+    	         	     	 thumb_img_path = #{record.thumbImgPath,jdbcType=VARCHAR},
+    	         	     	 img_seq = #{record.imgSeq,jdbcType=INTEGER},
+    	         	     	 upload_by = #{record.uploadBy,jdbcType=VARCHAR},
+    	         	     	 upload_date = #{record.uploadDate,jdbcType=TIMESTAMP}
+    	         <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+
+      <update id="updateByPrimaryKeySelective" parameterType="com.cpdms.model.dinning.ImgUrl">
+    update img_url
+    <set>
+                          <if test="imgId != null">
+        img_id = #{imgId,jdbcType=VARCHAR},
+      </if>
+                      <if test="imgPath != null">
+        img_path = #{imgPath,jdbcType=VARCHAR},
+      </if>
+                     <if test="thumbImgPath != null">
+        thumb_img_path = #{thumbImgPath,jdbcType=VARCHAR},
+      </if>
+                      <if test="imgSeq != null">
+        img_seq = #{imgSeq,jdbcType=INTEGER},
+      </if>
+                      <if test="uploadBy != null">
+        upload_by = #{uploadBy,jdbcType=VARCHAR},
+      </if>
+                      <if test="uploadDate != null">
+        upload_date = #{uploadDate,jdbcType=TIMESTAMP},
+      </if>
+              </set>
+    where
+            id = #{id,jdbcType=VARCHAR}
+
+  </update>
+
+
+
+  <update id="updateByPrimaryKey" parameterType="com.cpdms.model.dinning.ImgUrl">
+    update img_url
+    set
+             	        	    	 			img_id = #{imgId,jdbcType=VARCHAR},
+		     	        	    	 			img_path = #{imgPath,jdbcType=VARCHAR},
+		     	        	    	 			thumb_img_path = #{thumbImgPath,jdbcType=VARCHAR},
+		     	        	    	 			img_seq = #{imgSeq,jdbcType=INTEGER},
+		     	        	    	 			upload_by = #{uploadBy,jdbcType=VARCHAR},
+		     	        	    	 			upload_date = #{uploadDate,jdbcType=TIMESTAMP}
+		     	        where
+            id = #{id,jdbcType=VARCHAR}
+
+  </update>
+
+
+</mapper>

@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpdms.mapper.dinning.DailyDishesMapper">
+  <resultMap id="BaseResultMap" type="com.cpdms.model.dinning.DailyDishes">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="dd_dept_id" jdbcType="VARCHAR" property="ddDeptId" />
+    <result column="food_id" jdbcType="VARCHAR" property="foodId" />
+    <result column="food_name" jdbcType="VARCHAR" property="foodName" />
+    <result column="food_price" jdbcType="DECIMAL" property="foodPrice" />
+    <result column="food_status" jdbcType="INTEGER" property="foodStatus" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="food_desc" jdbcType="VARCHAR" property="foodDesc" />
+    <result column="food_unit" jdbcType="VARCHAR" property="foodUnit" />
+    <result column="sell_type_name" jdbcType="VARCHAR" property="sellTypeName" />
+    <result column="sell_type_ids" jdbcType="VARCHAR" property="sellTypeIds" />
+    <result column="range_name" jdbcType="VARCHAR" property="rangeName" />
+    <result column="range_ids" jdbcType="VARCHAR" property="rangeIds" />
+    <result column="food_begin_time" jdbcType="TIMESTAMP" property="foodBeginTime" />
+    <result column="food_end_time" jdbcType="TIMESTAMP" property="foodEndTime" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="avg_fraction" jdbcType="VARCHAR" property="avgFraction" />
+    <result column="avg_star" jdbcType="VARCHAR" property="avgStar" />
+    <result column="img_path" jdbcType="VARCHAR" property="imgPath" />
+    <result column="thumb_img_path" jdbcType="VARCHAR" property="thumbImgPath" />
+      <collection property="foodNumber" ofType="com.cpdms.model.dinning.FoodNumber">
+            <result property="number" column="number" />
+            <result property="beginTime" column="begin_time" />
+            <result property="endTime" column="end_time" />
+        </collection>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+<sql id="Base_Column_List">
+	  	  	      	id,
+       	  	      	group_id,
+       	  	      	dd_dept_id,
+       	  	      	food_id,
+       	  	      	food_name,
+       	  	      	food_price,
+       	  	      	food_status,
+       	  	      	status,
+       	  	      	sell_type_name,
+       	  	      	sell_type_ids,
+       	  	      	range_name,
+       	  	      	range_ids,
+       	  	      	food_begin_time,
+       	  	      	food_end_time,
+       	  	      	create_date,
+       	  	      	update_date,
+       	  	      	create_by,
+       	  	    	  	update_by
+       	</sql>
+  <select id="selectByExample" parameterType="com.cpdms.model.dinning.DailyDishesExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from daily_dishes
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from daily_dishes
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from daily_dishes
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cpdms.model.dinning.DailyDishesExample">
+    delete from daily_dishes
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.cpdms.model.dinning.DailyDishes">
+    insert into daily_dishes (
+      	  	       id,
+       	  	       group_id,
+       	  	       dd_dept_id,
+       	  	       food_id,
+       	  	       food_name,
+       	  	       food_price,
+       	  	       food_status,
+       	  	       status,
+       	  	       sell_type_name,
+       	  	       sell_type_ids,
+       	  	       range_name,
+       	  	       range_ids,
+       	  	       food_begin_time,
+       	  	       food_end_time,
+       	  	       create_date,
+       	  	       update_date,
+       	  	       create_by,
+       	  	    	  update_by
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{groupId,jdbcType=VARCHAR},
+       	  	      	#{ddDeptId,jdbcType=VARCHAR},
+       	  	      	#{foodId,jdbcType=VARCHAR},
+       	  	      	#{foodName,jdbcType=VARCHAR},
+       	  	      	#{foodPrice,jdbcType=DECIMAL},
+       	  	      	#{foodStatus,jdbcType=INTEGER},
+       	  	      	#{status,jdbcType=INTEGER},
+       	  	      	#{sellTypeName,jdbcType=VARCHAR},
+       	  	      	#{sellTypeIds,jdbcType=VARCHAR},
+       	  	      	#{rangeName,jdbcType=VARCHAR},
+       	  	      	#{rangeIds,jdbcType=VARCHAR},
+       	  	      	#{foodBeginTime,jdbcType=TIMESTAMP},
+       	  	      	#{foodEndTime,jdbcType=TIMESTAMP},
+       	  	      	#{createDate,jdbcType=TIMESTAMP},
+       	  	      	#{updateDate,jdbcType=TIMESTAMP},
+       	  	      	#{createBy,jdbcType=VARCHAR},
+       	  	    	  #{updateBy,jdbcType=VARCHAR}
+       	    )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.cpdms.model.dinning.DailyDishes">
+    insert into daily_dishes
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+
+      <if test="id != null">
+        id,
+      </if>
+
+
+      <if test="groupId != null">
+        group_id,
+      </if>
+      
+      <if test="ddDeptId != null">
+        dd_dept_id,
+      </if>
+
+
+      <if test="foodId != null">
+        food_id,
+      </if>
+
+
+      <if test="foodName != null">
+        food_name,
+      </if>
+
+
+      <if test="foodPrice != null">
+        food_price,
+      </if>
+
+
+      <if test="foodStatus != null">
+        food_status,
+      </if>
+ <if test="status != null">
+        status,
+      </if>
+
+
+      <if test="sellTypeName != null">
+        sell_type_name,
+      </if>
+
+
+      <if test="sellTypeIds != null">
+        sell_type_ids,
+      </if>
+
+
+      <if test="rangeName != null">
+        range_name,
+      </if>
+
+
+      <if test="rangeIds != null">
+        range_ids,
+      </if>
+
+
+      <if test="foodBeginTime != null">
+        food_begin_time,
+      </if>
+
+
+      <if test="foodEndTime != null">
+        food_end_time,
+      </if>
+
+
+      <if test="createDate != null">
+        create_date,
+      </if>
+
+
+      <if test="updateDate != null">
+        update_date,
+      </if>
+
+
+      <if test="createBy != null">
+        create_by,
+      </if>
+
+
+      <if test="updateBy != null">
+        update_by,
+      </if>
+
+         </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+          <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+          <if test="groupId != null">
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      	  <if test="ddDeptId != null">
+        #{ddDeptId,jdbcType=VARCHAR},
+      </if>
+          <if test="foodId != null">
+        #{foodId,jdbcType=VARCHAR},
+      </if>
+          <if test="foodName != null">
+        #{foodName,jdbcType=VARCHAR},
+      </if>
+          <if test="foodPrice != null">
+        #{foodPrice,jdbcType=DECIMAL},
+      </if>
+          <if test="foodStatus != null">
+        #{foodStatus,jdbcType=INTEGER},
+      </if>
+          <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+          <if test="sellTypeName != null">
+        #{sellTypeName,jdbcType=VARCHAR},
+      </if>
+          <if test="sellTypeIds != null">
+        #{sellTypeIds,jdbcType=VARCHAR},
+      </if>
+          <if test="rangeName != null">
+        #{rangeName,jdbcType=VARCHAR},
+      </if>
+          <if test="rangeIds != null">
+        #{rangeIds,jdbcType=VARCHAR},
+      </if>
+          <if test="foodBeginTime != null">
+        #{foodBeginTime,jdbcType=TIMESTAMP},
+      </if>
+          <if test="foodEndTime != null">
+        #{foodEndTime,jdbcType=TIMESTAMP},
+      </if>
+          <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+          <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+          <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+          <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+        </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.cpdms.model.dinning.DailyDishesExample" resultType="java.lang.Long">
+    select count(*) from daily_dishes
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update daily_dishes
+    <set>
+          <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+          <if test="record.groupId != null">
+        group_id = #{record.groupId,jdbcType=VARCHAR},
+      </if>
+      	  <if test="record.ddDeptId != null">
+        dd_dept_id = #{record.ddDeptId,jdbcType=VARCHAR},
+      </if>
+          <if test="record.foodId != null">
+        food_id = #{record.foodId,jdbcType=VARCHAR},
+      </if>
+          <if test="record.foodName != null">
+        food_name = #{record.foodName,jdbcType=VARCHAR},
+      </if>
+          <if test="record.foodPrice != null">
+        food_price = #{record.foodPrice,jdbcType=DECIMAL},
+      </if>
+          <if test="record.foodStatus != null">
+        food_status = #{record.foodStatus,jdbcType=INTEGER},
+      </if>
+          <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+          <if test="record.sellTypeName != null">
+        sell_type_name = #{record.sellTypeName,jdbcType=VARCHAR},
+      </if>
+          <if test="record.sellTypeIds != null">
+        sell_type_ids = #{record.sellTypeIds,jdbcType=VARCHAR},
+      </if>
+          <if test="record.rangeName != null">
+        range_name = #{record.rangeName,jdbcType=VARCHAR},
+      </if>
+          <if test="record.rangeIds != null">
+        range_ids = #{record.rangeIds,jdbcType=VARCHAR},
+      </if>
+          <if test="record.foodBeginTime != null">
+        food_begin_time = #{record.foodBeginTime,jdbcType=TIMESTAMP},
+      </if>
+          <if test="record.foodEndTime != null">
+        food_end_time = #{record.foodEndTime,jdbcType=TIMESTAMP},
+      </if>
+          <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+          <if test="record.updateDate != null">
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+          <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+          <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+
+  <update id="updateByExample" parameterType="map">
+    update daily_dishes
+    set
+            	     	 id = #{record.id,jdbcType=VARCHAR},
+    	         	     	 group_id = #{record.groupId,jdbcType=VARCHAR},
+    	         	     	 dd_dept_id = #{record.ddDeptId,jdbcType=VARCHAR},
+    	         	     	 food_id = #{record.foodId,jdbcType=VARCHAR},
+    	         	     	 food_name = #{record.foodName,jdbcType=VARCHAR},
+    	         	     	 food_price = #{record.foodPrice,jdbcType=DECIMAL},
+    	         	     	 food_status = #{record.foodStatus,jdbcType=INTEGER},
+    	         	     	 status = #{record.status,jdbcType=INTEGER},
+    	         	     	 sell_type_name = #{record.sellTypeName,jdbcType=VARCHAR},
+    	         	     	 sell_type_ids = #{record.sellTypeIds,jdbcType=VARCHAR},
+    	         	     	 range_name = #{record.rangeName,jdbcType=VARCHAR},
+    	         	     	 range_ids = #{record.rangeIds,jdbcType=VARCHAR},
+    	         	     	 food_begin_time = #{record.foodBeginTime,jdbcType=TIMESTAMP},
+    	         	     	 food_end_time = #{record.foodEndTime,jdbcType=TIMESTAMP},
+    	         	     	 create_date = #{record.createDate,jdbcType=TIMESTAMP},
+    	         	     	 update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+    	         	     	 create_by = #{record.createBy,jdbcType=VARCHAR},
+    	         	     	 update_by = #{record.updateBy,jdbcType=VARCHAR}
+    	         <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+
+      <update id="updateByPrimaryKeySelective" parameterType="com.cpdms.model.dinning.DailyDishes">
+    update daily_dishes
+    <set>
+                          <if test="groupId != null">
+        group_id = #{groupId,jdbcType=VARCHAR},
+      </if>
+      					  <if test="ddDeptId != null">
+        dd_dept_id = #{ddDeptId,jdbcType=VARCHAR},
+      </if>
+                      <if test="foodId != null">
+        food_id = #{foodId,jdbcType=VARCHAR},
+      </if>
+                      <if test="foodName != null">
+        food_name = #{foodName,jdbcType=VARCHAR},
+      </if>
+                      <if test="foodPrice != null">
+        food_price = #{foodPrice,jdbcType=DECIMAL},
+      </if>
+                      <if test="foodStatus != null">
+        food_status = #{foodStatus,jdbcType=INTEGER},
+      </if>
+               <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+                      <if test="sellTypeName != null">
+        sell_type_name = #{sellTypeName,jdbcType=VARCHAR},
+      </if>
+                      <if test="sellTypeIds != null">
+        sell_type_ids = #{sellTypeIds,jdbcType=VARCHAR},
+      </if>
+                      <if test="rangeName != null">
+        range_name = #{rangeName,jdbcType=VARCHAR},
+      </if>
+                      <if test="rangeIds != null">
+        range_ids = #{rangeIds,jdbcType=VARCHAR},
+      </if>
+                      <if test="foodBeginTime != null">
+        food_begin_time = #{foodBeginTime,jdbcType=TIMESTAMP},
+      </if>
+                      <if test="foodEndTime != null">
+        food_end_time = #{foodEndTime,jdbcType=TIMESTAMP},
+      </if>
+                      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+                      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+                      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+                      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+              </set>
+    where
+            id = #{id,jdbcType=VARCHAR}
+
+  </update>
+
+
+
+  <update id="updateByPrimaryKey" parameterType="com.cpdms.model.dinning.DailyDishes">
+    update daily_dishes
+    set
+             	        	    	 			group_id = #{groupId,jdbcType=VARCHAR},
+             	        	    	 			dd_dept_id = #{ddDeptId,jdbcType=VARCHAR},
+		     	        	    	 			food_id = #{foodId,jdbcType=VARCHAR},
+		     	        	    	 			food_name = #{foodName,jdbcType=VARCHAR},
+		     	        	    	 			food_price = #{foodPrice,jdbcType=DECIMAL},
+		     	        	    	 			food_status = #{foodStatus,jdbcType=INTEGER},
+		     	        	    	 			status = #{status,jdbcType=INTEGER},
+		     	        	    	 			sell_type_name = #{sellTypeName,jdbcType=VARCHAR},
+		     	        	    	 			sell_type_ids = #{sellTypeIds,jdbcType=VARCHAR},
+		     	        	    	 			range_name = #{rangeName,jdbcType=VARCHAR},
+		     	        	    	 			range_ids = #{rangeIds,jdbcType=VARCHAR},
+		     	        	    	 			food_begin_time = #{foodBeginTime,jdbcType=TIMESTAMP},
+		     	        	    	 			food_end_time = #{foodEndTime,jdbcType=TIMESTAMP},
+		     	        	    	 			create_date = #{createDate,jdbcType=TIMESTAMP},
+		     	        	    	 			update_date = #{updateDate,jdbcType=TIMESTAMP},
+		     	        	    	 			create_by = #{createBy,jdbcType=VARCHAR},
+		     	        	    	 			update_by = #{updateBy,jdbcType=VARCHAR}
+		     	        where
+            id = #{id,jdbcType=VARCHAR}
+
+  </update>
+
+    <select id="dailyList" resultMap="BaseResultMap">
+    select a.*,b.avg_fraction,b.avg_star,im.img_path,im.thumb_img_path,bf.food_desc,bf.food_unit
+from daily_dishes a left join (select food_id appraise_food_id,avg(fraction) avg_fraction,avg(star) avg_star from appraise group by food_id) b on a.food_id=b.appraise_food_id
+left join base_food bf on bf.id=a.food_id left join (select img_id,max(img_path) as img_path,max(thumb_img_path) as thumb_img_path from img_url group by img_id) im on im.img_id=bf.img_id
+where a.group_id=#{groupId} and  a.status=1 and a.food_begin_time &lt; now() and a.food_end_time &gt; now()
+order by a.update_date desc
+</select>
+
+    <select id="dailyGet" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select a.*,b.avg_fraction,b.avg_star,im.img_path,im.thumb_img_path,bf.food_desc,bf.food_unit
+from daily_dishes a left join (select food_id appraise_food_id,avg(fraction) avg_fraction,avg(star) avg_star from appraise group by food_id) b on a.food_id=b.appraise_food_id
+left join base_food bf on bf.id=a.food_id left join (select img_id,max(img_path) as img_path,max(thumb_img_path) as thumb_img_path from img_url group by img_id) im on im.img_id=bf.img_id
+where a.food_begin_time &lt; now() and a.food_end_time &gt; now()
+    and a.id = #{id,jdbcType=VARCHAR}
+  </select>
+
+    <select id="getByGroupAndFood" resultMap="BaseResultMap">
+        select id from daily_dishes where group_id=#{groupId} and food_id=#{foodId} and status=1 limit 1;
+    </select>
+
+    <select id="selectRelative" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select a.*, b.number,b.begin_time,b.end_time,im.img_path,im.thumb_img_path
+from daily_dishes a
+left join food_number b ON a.group_id = b.id
+left join base_food bf on bf.id=a.food_id
+left join(select img_id,max(img_path) as img_path,max(thumb_img_path) as thumb_img_path from img_url group by img_id) im on im.img_id=bf.img_id
+WHERE a.status=1
+    <if test="foodName != null and foodName != ''">and a.food_name=#{foodName}</if>
+        order by a.update_date desc
+</select>
+
+    <select id="getIdsByGroupId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select food_id  from daily_dishes where status=1 and group_id=#{groupId}
+    </select>
+
+
+</mapper>

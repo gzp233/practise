@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpdms.mapper.dinning.BizOrderMapper">
+  <resultMap id="BaseResultMap" type="com.cpdms.model.dinning.BizOrder">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="ord_code" jdbcType="VARCHAR" property="ordCode" />
+    <result column="bo_dept_id" jdbcType="VARCHAR" property="boDeptId" />
+    <result column="ord_time" jdbcType="TIMESTAMP" property="ordTime" />
+    <result column="ord_emp_id" jdbcType="VARCHAR" property="ordEmpId" />
+    <result column="emp_name" jdbcType="VARCHAR" property="empName" />
+    <result column="ord_time_range_id" jdbcType="VARCHAR" property="ordTimeRangeId" />
+    <result column="range_name" jdbcType="VARCHAR" property="rangeName" />
+    <result column="ord_state" jdbcType="VARCHAR" property="ordState" />
+    <result column="ord_amt" jdbcType="DECIMAL" property="ordAmt" />
+    <result column="take_no" jdbcType="INTEGER" property="takeNo" />
+    <result column="ord_src" jdbcType="VARCHAR" property="ordSrc" />
+    <result column="take_by" jdbcType="VARCHAR" property="takeBy" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="card_no" jdbcType="VARCHAR" property="cardNo" />
+    <result column="ord_memo" jdbcType="VARCHAR" property="ordMemo" />
+    <result column="planed_take_time" jdbcType="VARCHAR" property="planedTakeTime" />
+    <result column="actual_take_time" jdbcType="VARCHAR" property="actualTakeTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="sell_type_name" jdbcType="VARCHAR" property="sellTypeName" />
+      <collection property="bizOrdFoodList" ofType="com.cpdms.model.dinning.BizOrdFood">
+            <result property="price" column="price" />
+            <result property="qty" column="qty" />
+            <result property="foodId" column="food_id" />
+          <association property="baseFood" javaType="com.cpdms.model.dinning.BaseFood">
+              <result property="foodName" column="food_name" />
+              <result property="foodUnit" column="food_unit" />
+              <result property="imgId" column="img_id" />
+              <collection property="imgs" ofType="com.cpdms.model.dinning.ImgUrl">
+            <result property="imgPath" column="img_path" />
+            <result property="thumbImgPath" column="thumb_img_path" />
+        </collection>
+          </association>
+        </collection>
+  </resultMap>
+
+    <resultMap id="otherResultMap" type="com.cpdms.model.dinning.BizOrder">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="ord_code" jdbcType="VARCHAR" property="ordCode" />
+    <result column="bo_dept_id" jdbcType="VARCHAR" property="boDeptId" />
+    <result column="ord_time" jdbcType="TIMESTAMP" property="ordTime" />
+    <result column="ord_emp_id" jdbcType="VARCHAR" property="ordEmpId" />
+    <result column="emp_name" jdbcType="VARCHAR" property="empName" />
+    <result column="ord_time_range_id" jdbcType="VARCHAR" property="ordTimeRangeId" />
+    <result column="range_name" jdbcType="VARCHAR" property="rangeName" />
+    <result column="ord_state" jdbcType="VARCHAR" property="ordState" />
+    <result column="ord_amt" jdbcType="DECIMAL" property="ordAmt" />
+    <result column="take_no" jdbcType="INTEGER" property="takeNo" />
+    <result column="ord_src" jdbcType="VARCHAR" property="ordSrc" />
+    <result column="take_by" jdbcType="VARCHAR" property="takeBy" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="card_no" jdbcType="VARCHAR" property="cardNo" />
+    <result column="ord_memo" jdbcType="VARCHAR" property="ordMemo" />
+    <result column="planed_take_time" jdbcType="VARCHAR" property="planedTakeTime" />
+    <result column="actual_take_time" jdbcType="VARCHAR" property="actualTakeTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="sell_type_name" jdbcType="VARCHAR" property="sellTypeName" />
+      <collection property="bizOrdFoodList"  ofType="relResult" javaType="ArrayList"  column="id" select="selectRelatedMsg"/>
+  </resultMap>
+
+    <resultMap id="relResult" type="com.cpdms.model.dinning.BizOrdFood">
+        <result property="price" column="price" />
+            <result property="qty" column="qty" />
+            <result property="foodId" column="food_id" />
+          <association property="baseFood" javaType="com.cpdms.model.dinning.BaseFood">
+              <result property="foodName" column="food_name" />
+              <result property="foodDesc" column="food_desc" />
+              <result property="foodUnit" column="food_unit" />
+              <result property="imgId" column="img_id" />
+              <result column="avg_fraction" jdbcType="VARCHAR" property="avgFraction" />
+              <result column="avg_star" jdbcType="VARCHAR" property="avgStar" />
+              <result column="range_names" jdbcType="VARCHAR" property="rangeNames" />
+              <result column="sell_type_names" jdbcType="VARCHAR" property="sellTypeNames" />
+              <collection property="imgs" ofType="com.cpdms.model.dinning.ImgUrl">
+            <result property="imgPath" column="img_path" />
+            <result property="thumbImgPath" column="thumb_img_path" />
+        </collection>
+          </association>
+    </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+<sql id="Base_Column_List">
+	  	  	      	id,
+       	  	      	ord_code,
+       	  	      	bo_dept_id,
+       	  	      	ord_time,
+       	  	      	ord_emp_id,
+       	  	      	ord_time_range_id,
+       	  	      	ord_state,
+       	  	      	ord_amt,
+       	  	      	take_no,
+       	  	      	ord_src,
+       	  	      	take_by,
+       	  	      	tel,
+       	  	      	card_no,
+       	  	      	ord_memo,
+       	  	      	planed_take_time,
+       	  	      	actual_take_time,
+       	  	      	create_by,
+       	  	      	create_date,
+       	  	      	update_by,
+       	  	      	update_date,
+       	  	      	sell_type_name,
+       	  	    	  	status
+       	</sql>
+  <select id="selectByExample" parameterType="com.cpdms.model.dinning.BizOrderExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+   	o.*, e.emp_name, r.range_name
+    from biz_order as o left join base_emp as e on o.ord_emp_id = e.id
+    left join base_time_range as r on o.ord_time_range_id = r.id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="otherResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from biz_order
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from biz_order
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cpdms.model.dinning.BizOrderExample">
+    delete from biz_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" parameterType="com.cpdms.model.dinning.BizOrder">
+    insert into biz_order (
+      	  	       id,
+       	  	       ord_code,
+       	  	       bo_dept_id,
+       	  	       ord_time,
+       	  	       ord_emp_id,
+       	  	       ord_time_range_id,
+       	  	       ord_state,
+       	  	       ord_amt,
+       	  	       take_no,
+       	  	       ord_src,
+       	  	       take_by,
+       	  	       tel,
+       	  	       card_no,
+       	  	       ord_memo,
+       	  	       sell_type_name,
+       	  	       planed_take_time,
+       	  	       actual_take_time,
+       	  	       create_by,
+       	  	       create_date,
+       	  	       update_by,
+       	  	       update_date,
+       	  	    	  status
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{ordCode,jdbcType=VARCHAR},
+       	  	      	#{boDeptId,jdbcType=VARCHAR},
+       	  	      	#{ordTime,jdbcType=TIMESTAMP},
+       	  	      	#{ordEmpId,jdbcType=VARCHAR},
+       	  	      	#{ordTimeRangeId,jdbcType=VARCHAR},
+       	  	      	#{ordState,jdbcType=VARCHAR},
+       	  	      	#{ordAmt,jdbcType=DECIMAL},
+       	  	      	#{takeNo,jdbcType=INTEGER},
+       	  	      	#{ordSrc,jdbcType=VARCHAR},
+       	  	      	#{takeBy,jdbcType=VARCHAR},
+       	  	      	#{tel,jdbcType=VARCHAR},
+       	  	      	#{cardNo,jdbcType=VARCHAR},
+       	  	      	#{ordMemo,jdbcType=VARCHAR},
+       	  	      	#{sellTypeName,jdbcType=VARCHAR},
+       	  	      	#{planedTakeTime,jdbcType=VARCHAR},
+       	  	      	#{actualTakeTime,jdbcType=VARCHAR},
+       	  	      	#{createBy,jdbcType=VARCHAR},
+       	  	      	#{createDate,jdbcType=TIMESTAMP},
+       	  	      	#{updateBy,jdbcType=VARCHAR},
+       	  	      	#{updateDate,jdbcType=TIMESTAMP},
+       	  	    	  #{status,jdbcType=INTEGER}
+       	    )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.cpdms.model.dinning.BizOrder">
+    insert into biz_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+
+      <if test="id != null">
+        id,
+      </if>
+
+
+      <if test="ordCode != null">
+        ord_code,
+      </if>
+      
+      <if test="boDeptId != null">
+        bo_dept_id,
+      </if>
+
+
+      <if test="ordTime != null">
+        ord_time,
+      </if>
+
+
+      <if test="ordEmpId != null">
+        ord_emp_id,
+      </if>
+
+
+      <if test="ordTimeRangeId != null">
+        ord_time_range_id,
+      </if>
+
+
+      <if test="ordState != null">
+        ord_state,
+      </if>
+
+
+      <if test="ordAmt != null">
+        ord_amt,
+      </if>
+
+      <if test="takeNo != null">
+          take_no,
+      </if>
+
+
+      <if test="ordSrc != null">
+        ord_src,
+      </if>
+
+
+      <if test="takeBy != null">
+        take_by,
+      </if>
+
+
+      <if test="tel != null">
+        tel,
+      </if>
+
+ <if test="cardNo != null">
+        card_no,
+      </if>
+
+
+      <if test="ordMemo != null">
+        ord_memo,
+      </if>
+
+        <if test="sellTypeName != null">
+        sell_type_name,
+      </if>
+
+
+      <if test="planedTakeTime != null">
+        planed_take_time,
+      </if>
+
+
+      <if test="actualTakeTime != null">
+        actual_take_time,
+      </if>
+
+
+      <if test="createBy != null">
+        create_by,
+      </if>
+
+
+      <if test="createDate != null">
+        create_date,
+      </if>
+
+
+      <if test="updateBy != null">
+        update_by,
+      </if>
+
+
+      <if test="updateDate != null">
+        update_date,
+      </if>
+
+
+      <if test="status != null">
+        status,
+      </if>
+
+         </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+          <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+          <if test="ordCode != null">
+        #{ordCode,jdbcType=VARCHAR},
+      </if>
+      	  <if test="boDeptId != null">
+        #{boDeptId,jdbcType=VARCHAR},
+      </if>
+          <if test="ordTime != null">
+        #{ordTime,jdbcType=TIMESTAMP},
+      </if>
+          <if test="ordEmpId != null">
+        #{ordEmpId,jdbcType=VARCHAR},
+      </if>
+          <if test="ordTimeRangeId != null">
+        #{ordTimeRangeId,jdbcType=VARCHAR},
+      </if>
+          <if test="ordState != null">
+        #{ordState,jdbcType=VARCHAR},
+      </if>
+          <if test="ordAmt != null">
+        #{ordAmt,jdbcType=DECIMAL},
+      </if>
+           <if test="takeNo != null">
+        #{takeNo,jdbcType=INTEGER},
+      </if>
+          <if test="ordSrc != null">
+        #{ordSrc,jdbcType=VARCHAR},
+      </if>
+          <if test="takeBy != null">
+        #{takeBy,jdbcType=VARCHAR},
+      </if>
+          <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+        <if test="cardNo != null">
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+          <if test="ordMemo != null">
+        #{ordMemo,jdbcType=VARCHAR},
+      </if>
+          <if test="sellTypeName != null">
+        #{sellTypeName,jdbcType=VARCHAR},
+      </if>
+          <if test="planedTakeTime != null">
+        #{planedTakeTime,jdbcType=VARCHAR},
+      </if>
+          <if test="actualTakeTime != null">
+        #{actualTakeTime,jdbcType=VARCHAR},
+      </if>
+          <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+          <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+          <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+          <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+          <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+        </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="com.cpdms.model.dinning.BizOrderExample" resultType="java.lang.Long">
+    select count(*) from biz_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update biz_order
+    <set>
+          <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+          <if test="record.ordCode != null">
+        ord_code = #{record.ordCode,jdbcType=VARCHAR},
+      </if>
+      	  <if test="record.boDeptId != null">
+        bo_dept_id = #{record.boDeptId,jdbcType=VARCHAR},
+      </if>
+          <if test="record.ordTime != null">
+        ord_time = #{record.ordTime,jdbcType=TIMESTAMP},
+      </if>
+          <if test="record.ordEmpId != null">
+        ord_emp_id = #{record.ordEmpId,jdbcType=VARCHAR},
+      </if>
+          <if test="record.ordTimeRangeId != null">
+        ord_time_range_id = #{record.ordTimeRangeId,jdbcType=VARCHAR},
+      </if>
+          <if test="record.ordState != null">
+        ord_state = #{record.ordState,jdbcType=VARCHAR},
+      </if>
+          <if test="record.ordAmt != null">
+        ord_amt = #{record.ordAmt,jdbcType=DECIMAL},
+      </if>
+           <if test="record.takeNo != null">
+               take_no = #{record.takeNo,jdbcType=INTEGER},
+      </if>
+          <if test="record.ordSrc != null">
+        ord_src = #{record.ordSrc,jdbcType=VARCHAR},
+      </if>
+          <if test="record.takeBy != null">
+        take_by = #{record.takeBy,jdbcType=VARCHAR},
+      </if>
+          <if test="record.tel != null">
+        tel = #{record.tel,jdbcType=VARCHAR},
+      </if>
+           <if test="record.cardNo != null">
+        card_no = #{record.cardNo,jdbcType=VARCHAR},
+      </if>
+          <if test="record.ordMemo != null">
+        ord_memo = #{record.ordMemo,jdbcType=VARCHAR},
+      </if>
+           <if test="record.sellTypeName != null">
+        sell_type_name = #{record.sellTypeName,jdbcType=VARCHAR},
+      </if>
+          <if test="record.planedTakeTime != null">
+        planed_take_time = #{record.planedTakeTime,jdbcType=VARCHAR},
+      </if>
+          <if test="record.actualTakeTime != null">
+        actual_take_time = #{record.actualTakeTime,jdbcType=VARCHAR},
+      </if>
+          <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+          <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+          <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+          <if test="record.updateDate != null">
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+          <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+
+  <update id="updateByExample" parameterType="map">
+    update biz_order
+    set
+            	     	 id = #{record.id,jdbcType=VARCHAR},
+    	         	     	 ord_code = #{record.ordCode,jdbcType=VARCHAR},
+    	         	     	 bo_dept_id = #{record.boDeptId,jdbcType=VARCHAR},
+    	         	     	 ord_time = #{record.ordTime,jdbcType=TIMESTAMP},
+    	         	     	 ord_emp_id = #{record.ordEmpId,jdbcType=VARCHAR},
+    	         	     	 ord_time_range_id = #{record.ordTimeRangeId,jdbcType=VARCHAR},
+    	         	     	 ord_state = #{record.ordState,jdbcType=VARCHAR},
+    	         	     	 ord_amt = #{record.ordAmt,jdbcType=DECIMAL},
+      take_no = #{record.takeNo,jdbcType=INTEGER},
+    	         	     	 ord_src = #{record.ordSrc,jdbcType=VARCHAR},
+    	         	     	 take_by = #{record.takeBy,jdbcType=VARCHAR},
+    	         	     	 tel = #{record.tel,jdbcType=VARCHAR},
+    	         	     	 card_no = #{record.cardNo,jdbcType=VARCHAR},
+    	         	     	 ord_memo = #{record.ordMemo,jdbcType=VARCHAR},
+    	         	     	 sellTypeName = #{record.sellTypeName,jdbcType=VARCHAR},
+    	         	     	 planed_take_time = #{record.planedTakeTime,jdbcType=VARCHAR},
+    	         	     	 actual_take_time = #{record.actualTakeTime,jdbcType=VARCHAR},
+    	         	     	 create_by = #{record.createBy,jdbcType=VARCHAR},
+    	         	     	 create_date = #{record.createDate,jdbcType=TIMESTAMP},
+    	         	     	 update_by = #{record.updateBy,jdbcType=VARCHAR},
+    	         	     	 update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+    	         	     	 status = #{record.status,jdbcType=INTEGER}
+    	         <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+
+      <update id="updateByPrimaryKeySelective" parameterType="com.cpdms.model.dinning.BizOrder">
+    update biz_order
+    <set>
+                          <if test="ordCode != null">
+        ord_code = #{ordCode,jdbcType=VARCHAR},
+      </if>
+      				  <if test="boDeptId != null">
+        bo_dept_id = #{boDeptId,jdbcType=VARCHAR},
+      </if>
+                      <if test="ordTime != null">
+        ord_time = #{ordTime,jdbcType=TIMESTAMP},
+      </if>
+                      <if test="ordEmpId != null">
+        ord_emp_id = #{ordEmpId,jdbcType=VARCHAR},
+      </if>
+                      <if test="ordTimeRangeId != null">
+        ord_time_range_id = #{ordTimeRangeId,jdbcType=VARCHAR},
+      </if>
+                      <if test="ordState != null">
+        ord_state = #{ordState,jdbcType=VARCHAR},
+      </if>
+                      <if test="ordAmt != null">
+        ord_amt = #{ordAmt,jdbcType=DECIMAL},
+      </if>
+                         <if test="takeNo != null">
+                             take_no = #{takeNo,jdbcType=INTEGER},
+      </if>
+                      <if test="ordSrc != null">
+        ord_src = #{ordSrc,jdbcType=VARCHAR},
+      </if>
+                      <if test="takeBy != null">
+        take_by = #{takeBy,jdbcType=VARCHAR},
+      </if>
+                      <if test="tel != null">
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+                <if test="cardNo != null">
+        card_no = #{cardNo,jdbcType=VARCHAR},
+      </if>
+                      <if test="ordMemo != null">
+        ord_memo = #{ordMemo,jdbcType=VARCHAR},
+      </if>
+                        <if test="sellTypeName != null">
+        sell_type_name = #{sellTypeName,jdbcType=VARCHAR},
+      </if>
+                      <if test="planedTakeTime != null">
+        planed_take_time = #{planedTakeTime,jdbcType=VARCHAR},
+      </if>
+                      <if test="actualTakeTime != null">
+        actual_take_time = #{actualTakeTime,jdbcType=VARCHAR},
+      </if>
+                      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+                      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+                      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+                      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+                      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+              </set>
+    where
+            id = #{id,jdbcType=VARCHAR}
+
+  </update>
+
+    <select id="selectByOrdCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select * from biz_order where ord_code=#{ordCode} and status=1
+    </select>
+
+
+
+  <update id="updateByPrimaryKey" parameterType="com.cpdms.model.dinning.BizOrder">
+    update biz_order
+    set
+             	        	    	 			ord_code = #{ordCode,jdbcType=VARCHAR},
+             	        	    	 			bo_dept_id = #{boDeptId,jdbcType=VARCHAR},
+		     	        	    	 			ord_time = #{ordTime,jdbcType=TIMESTAMP},
+		     	        	    	 			ord_emp_id = #{ordEmpId,jdbcType=VARCHAR},
+		     	        	    	 			ord_time_range_id = #{ordTimeRangeId,jdbcType=VARCHAR},
+		     	        	    	 			ord_state = #{ordState,jdbcType=VARCHAR},
+		     	        	    	 			ord_amt = #{ordAmt,jdbcType=DECIMAL},
+		     	        	    	 			take_no = #{takeNo,jdbcType=INTEGER},
+		     	        	    	 			ord_src = #{ordSrc,jdbcType=VARCHAR},
+		     	        	    	 			take_by = #{takeBy,jdbcType=VARCHAR},
+		     	        	    	 			tel = #{tel,jdbcType=VARCHAR},
+		     	        	    	 			card_no = #{cardNo,jdbcType=VARCHAR},
+		     	        	    	 			ord_memo = #{ordMemo,jdbcType=VARCHAR},
+		     	        	    	 			sell_type_name = #{sellTypeName,jdbcType=VARCHAR},
+		     	        	    	 			planed_take_time = #{planedTakeTime,jdbcType=VARCHAR},
+		     	        	    	 			actual_take_time = #{actualTakeTime,jdbcType=VARCHAR},
+		     	        	    	 			create_by = #{createBy,jdbcType=VARCHAR},
+		     	        	    	 			create_date = #{createDate,jdbcType=TIMESTAMP},
+		     	        	    	 			update_by = #{updateBy,jdbcType=VARCHAR},
+		     	        	    	 			update_date = #{updateDate,jdbcType=TIMESTAMP},
+		     	        	    	 			status = #{status,jdbcType=INTEGER}
+		     	        where
+            id = #{id,jdbcType=VARCHAR}
+
+  </update>
+
+    <select id="selectRelatedMsg" resultMap="relResult" parameterType="string">
+       select b.price,b.qty,b.food_id,c.food_name,c.food_unit,c.food_desc,c.img_id,d.img_path,d.thumb_img_path,e.avg_fraction,e.avg_star,se.sellTypeNames as sell_type_names,ra.rangeNames as range_names
+        from biz_ord_food b
+        LEFT JOIN base_food c ON b.food_id=c.id
+LEFT JOIN img_url d ON c.img_id=d.img_id
+left join (select food_id,avg(fraction) avg_fraction,avg(star) avg_star from appraise group by food_id) e on b.food_id=e.food_id
+left join (select GROUP_CONCAT(a.sell_type_name SEPARATOR '/') as sellTypeNames,b.food_id from base_sell_type a left join ref_food_sell b on a.id=b.sell_type_id group by b.food_id) se on b.food_id=se.food_id
+left join (select GROUP_CONCAT(a.range_name SEPARATOR '/') as rangeNames,b.food_id from base_time_range a left join ref_food_time b on a.id=b.time_id group by b.food_id) ra on b.food_id=ra.food_id
+       where b.ord_id=#{id}
+    </select>
+
+    <select id="selectOrdersByEmpIdAndStatus" resultMap="otherResultMap">
+        select * from biz_order where ord_emp_id=#{ordEmpId} and status=1
+        <if test="type == 1">
+    and ord_state!='已预定'
+</if>
+<if test="type == 0">
+    and ord_state='已预定'
+</if>
+<if test="sellTypeName != null and sellTypeName != ''">
+    and sell_type_name=#{sellTypeName}
+</if>
+        order by update_date desc
+    </select>
+
+  <select id="queryOrdFoodSumByTime" parameterType="map" resultType="map">
+  select om.food_id as foodId,im.img_path,im.thumb_img_path as imgUrl,f.food_name as foodName,r.range_name as rangeName,om.qty,om.PLANED_TAKE_TIME as planedTakeTime from
+(
+select p.FOOD_ID,o.ORD_TIME_RANGE_ID,sum(p.QTY) as qty,o.planed_take_time  from biz_order o
+inner join biz_ord_food p on o.id = p.ord_id
+where o.ord_state = '已预定'
+group by p.FOOD_ID,o.ORD_TIME_RANGE_ID,o.planed_take_time
+) om
+inner join base_food f on om.food_id = f.id
+inner join base_time_range r on r.id = om.ord_time_range_id
+left join (select img_id,max(img_path) as img_path,max(thumb_img_path) as thumb_img_path from img_url GROUP BY img_id) im on f.img_id=im.img_id
+      where 1=1
+      <if test="ordTimeRangeId != null and ordTimeRangeId != ''">
+          and r.id = #{ordTimeRangeId}
+      </if>
+      <if test="plantedTakeTimeL != null and plantedTakeTimeL != ''">
+          and om.PLANED_TAKE_TIME &gt;= #{plantedTakeTimeL}
+      </if>
+      <if test="plantedTakeTimeG != null and plantedTakeTimeG != ''">
+          and om.PLANED_TAKE_TIME &lt;= #{plantedTakeTimeG}
+      </if>
+      order by planedTakeTime desc
+  </select>
+ <select id="queryOrdPrintList" parameterType="map" resultType="map">
+ select o.id as ordId,o.id as id,o.take_no,o.sell_type_name,o.ord_state as ordState, o.ord_code as ordCode ,o.ORD_TIME as ordTime,o.ORD_AMT as ordAmt,o.tel as tel,o.card_no as card_no,o.ord_memo as ordMemo,o.PLANED_TAKE_TIME as planedTakeTime,
+e.EMP_CODE as empCode,e.EMP_NAME as empName,e.dept_name as deptName,tr.RANGE_NAME as rangeName
+from biz_order o
+inner join base_emp e on o.ORD_EMP_ID= e.id
+inner join base_time_range tr on o.ORD_TIME_RANGE_ID = tr.id
+     <if test="ordIds != null">
+         and o.id in
+<foreach close=")" collection="ordIds" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+     </if>
+     <if test="ordCode != null and ordCode != ''">
+         and o.ord_code = #{ordCode}
+     </if>
+     <if test="status != null">
+         and o.status = #{status}
+     </if>
+     <if test="ordState != null and ordState != ''">
+         and o.ord_state = #{ordState}
+     </if>
+     <if test="ordTimeRangeId != null and ordTimeRangeId != ''">
+         and o.ord_time_range_id = #{ordTimeRangeId}
+     </if>
+     <if test="plantedTakeTimeL != null and plantedTakeTimeL != ''">
+         and o.planed_take_time &gt;= #{plantedTakeTimeL}
+     </if>
+      <if test="plantedTakeTimeG != null and plantedTakeTimeG != ''">
+         and o.planed_take_time &lt;= #{plantedTakeTimeG}
+     </if>
+      <if test="ordTimeL != null and ordTimeL != ''">
+         and o.ord_time &gt;= #{ordTimeL}
+     </if>
+      <if test="ordTimeG != null and ordTimeG != ''">
+         and o.ord_time &lt;= #{ordTimeG}
+     </if>
+      order by o.update_date desc
+ </select>
+  <select id="queryOrdDetailList" parameterType="map" resultType="map">
+select o.id as ordId,o.take_no,p.FOOD_NAME as foodName,f.PRICE as price,f.QTY as qty,p.FOOD_UNIT as foodUnit,p.FOOD_PACK as foodPack,p.FOOD_SPEC as foodSpec
+from biz_order o
+inner join biz_ord_food f on o.id = f.ord_id
+inner join base_food p  on f.FOOD_ID = p.id
+<if test="ordIds != null">
+         and o.id in
+<foreach close=")" collection="ordIds" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+     </if>
+      order by o.update_date desc
+ </select>
+
+    <select id="selectDetail" parameterType="java.lang.String" resultMap="BaseResultMap">
+   select o.*,f.price,f.qty,f.food_id,bf.food_name,bf.food_unit,i.img_path,i.thumb_img_path
+    from biz_order as o left join biz_ord_food f on o.id=f.ord_id
+    left join base_food as bf on bf.id=f.food_id
+    left join img_url as i on bf.img_id=i.img_id
+    where o.id = #{id,jdbcType=VARCHAR}
+  </select>
+
+    <select id="getMaxTakeNo" parameterType="java.lang.String" resultType="map">
+        select max(take_no) take_no from biz_order where sell_type_name='外卖' and planed_take_time=#{planedTakeTime}
+    </select>
+</mapper>

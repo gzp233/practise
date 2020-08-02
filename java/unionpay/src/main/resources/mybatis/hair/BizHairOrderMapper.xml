@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpdms.mapper.hair.BizHairOrderMapper">
+    <resultMap id="BaseResultMap" type="com.cpdms.model.hair.BizHairOrder">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="ord_code" jdbcType="VARCHAR" property="ordCode"/>
+        <result column="ord_time" jdbcType="TIMESTAMP" property="ordTime"/>
+        <result column="ord_end_time" jdbcType="TIMESTAMP" property="ordEndTime"/>
+        <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
+        <result column="ord_emp_id" jdbcType="VARCHAR" property="ordEmpId"/>
+        <result column="ord_state" jdbcType="VARCHAR" property="ordState"/>
+        <result column="ord_amt" jdbcType="DECIMAL" property="ordAmt"/>
+        <result column="ord_src" jdbcType="VARCHAR" property="ordSrc"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="card_no" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="ord_memo" jdbcType="VARCHAR" property="ordMemo"/>
+        <result column="bho_dept_id" jdbcType="VARCHAR" property="bhoDeptId"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <collection property="bizHairOrdHairList" ofType="com.cpdms.model.hair.BizHairOrdHair">
+            <result property="price" column="price"/>
+            <result property="hairId" column="hair_id"/>
+            <association property="baseHair" javaType="com.cpdms.model.hair.BaseHair">
+                <result property="hairName" column="hair_name"/>
+                <result property="hairType" column="hair_type"/>
+                <result property="serviceId" column="service_id"/>
+                <result property="imgId" column="img_id"/>
+                <collection property="imgs" ofType="com.cpdms.model.dinning.ImgUrl">
+                    <result property="imgPath" column="img_path"/>
+                    <result property="thumbImgPath" column="thumb_img_path"/>
+                </collection>
+            </association>
+        </collection>
+    </resultMap>
+
+    <resultMap id="otherResultMap" type="com.cpdms.model.hair.BizHairOrder">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="ord_code" jdbcType="VARCHAR" property="ordCode"/>
+        <result column="ord_time" jdbcType="TIMESTAMP" property="ordTime"/>
+        <result column="ord_end_time" jdbcType="TIMESTAMP" property="ordEndTime"/>
+        <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime"/>
+        <result column="ord_emp_id" jdbcType="VARCHAR" property="ordEmpId"/>
+        <result column="ord_state" jdbcType="VARCHAR" property="ordState"/>
+        <result column="ord_amt" jdbcType="DECIMAL" property="ordAmt"/>
+        <result column="ord_src" jdbcType="VARCHAR" property="ordSrc"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="card_no" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="ord_memo" jdbcType="VARCHAR" property="ordMemo"/>
+        <result column="bho_dept_id" jdbcType="VARCHAR" property="bhoDeptId"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <collection property="bizHairOrdHairList" ofType="hairResult" javaType="ArrayList" column="id"
+                    select="getHairs"/>
+    </resultMap>
+
+    <resultMap id="hairResult" type="com.cpdms.model.hair.BizHairOrdHair">
+        <result property="price" column="price"/>
+        <result property="hairId" column="hair_id"/>
+        <association property="baseHair" javaType="com.cpdms.model.hair.BaseHair">
+            <result property="hairName" column="hair_name"/>
+            <result property="hairType" column="hair_type"/>
+            <result property="serviceId" column="service_id"/>
+            <result property="imgId" column="img_id"/>
+            <collection property="imgs" ofType="com.cpdms.model.dinning.ImgUrl">
+                <result property="imgPath" column="img_path"/>
+                <result property="thumbImgPath" column="thumb_img_path"/>
+            </collection>
+        </association>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+	  	  	      	id,
+       	  	      	ord_code,
+       	  	      	ord_time,
+       	  	      	ord_end_time,
+       	  	      	finish_time,
+       	  	      	ord_emp_id,
+       	  	      	ord_state,
+       	  	      	ord_amt,
+       	  	      	ord_src,
+       	  	      	tel,
+       	  	      	card_no,
+       	  	      	ord_memo,
+       	  	      	bho_dept_id,
+       	  	      	create_by,
+       	  	      	create_date,
+       	  	      	update_by,
+       	  	      	update_date,
+       	  	    	  	status
+       	</sql>
+    <select id="selectByExample" parameterType="com.cpdms.model.hair.BizHairOrderExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from biz_hair_order
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="otherResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_hair_order
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from biz_hair_order
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.cpdms.model.hair.BizHairOrderExample">
+        delete from biz_hair_order
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="com.cpdms.model.hair.BizHairOrder">
+    insert into biz_hair_order (
+      	  	       id,
+       	  	       ord_code,
+       	  	       ord_time,
+       	  	       ord_end_time,
+       	  	       finish_time,
+       	  	       ord_emp_id,
+       	  	       ord_state,
+       	  	       ord_amt,
+       	  	       ord_src,
+       	  	       tel,
+       	  	       card_no,
+       	  	       ord_memo,
+       	  	       bho_dept_id,
+       	  	       create_by,
+       	  	       create_date,
+       	  	       update_by,
+       	  	       update_date,
+       	  	    	  status
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{ordCode,jdbcType=VARCHAR},
+       	  	      	#{ordTime,jdbcType=TIMESTAMP},
+       	  	      	#{ordEndTime,jdbcType=TIMESTAMP},
+       	  	      	#{finishTime,jdbcType=TIMESTAMP},
+       	  	      	#{ordEmpId,jdbcType=VARCHAR},
+       	  	      	#{ordState,jdbcType=VARCHAR},
+       	  	      	#{ordAmt,jdbcType=DECIMAL},
+       	  	      	#{ordSrc,jdbcType=VARCHAR},
+       	  	      	#{tel,jdbcType=VARCHAR},
+       	  	      	#{cardNo,jdbcType=VARCHAR},
+       	  	      	#{ordMemo,jdbcType=VARCHAR},
+       	  	      	#{bhoDeptId,jdbcType=VARCHAR},
+       	  	      	#{createBy,jdbcType=VARCHAR},
+       	  	      	#{createDate,jdbcType=TIMESTAMP},
+       	  	      	#{updateBy,jdbcType=VARCHAR},
+       	  	      	#{updateDate,jdbcType=TIMESTAMP},
+       	  	    	  #{status,jdbcType=TINYINT}
+       	    )
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.cpdms.model.hair.BizHairOrder">
+        insert into biz_hair_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="id != null">
+                id,
+            </if>
+
+
+            <if test="ordCode != null">
+                ord_code,
+            </if>
+
+
+            <if test="ordTime != null">
+                ord_time,
+            </if>
+
+
+            <if test="ordEndTime != null">
+                ord_end_time,
+            </if>
+
+
+            <if test="finishTime != null">
+                finish_time,
+            </if>
+
+
+            <if test="ordEmpId != null">
+                ord_emp_id,
+            </if>
+
+
+            <if test="ordState != null">
+                ord_state,
+            </if>
+
+
+            <if test="ordAmt != null">
+                ord_amt,
+            </if>
+
+
+            <if test="ordSrc != null">
+                ord_src,
+            </if>
+
+
+            <if test="tel != null">
+                tel,
+            </if>
+            <if test="cardNo != null">
+                card_no,
+            </if>
+
+
+            <if test="ordMemo != null">
+                ord_memo,
+            </if>
+
+
+            <if test="bhoDeptId != null">
+                bho_dept_id,
+            </if>
+
+
+            <if test="createBy != null">
+                create_by,
+            </if>
+
+
+            <if test="createDate != null">
+                create_date,
+            </if>
+
+
+            <if test="updateBy != null">
+                update_by,
+            </if>
+
+
+            <if test="updateDate != null">
+                update_date,
+            </if>
+
+
+            <if test="status != null">
+                status,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="ordCode != null">
+                #{ordCode,jdbcType=VARCHAR},
+            </if>
+            <if test="ordTime != null">
+                #{ordTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ordEndTime != null">
+                #{ordEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="finishTime != null">
+                #{finishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ordEmpId != null">
+                #{ordEmpId,jdbcType=VARCHAR},
+            </if>
+            <if test="ordState != null">
+                #{ordState,jdbcType=VARCHAR},
+            </if>
+            <if test="ordAmt != null">
+                #{ordAmt,jdbcType=DECIMAL},
+            </if>
+            <if test="ordSrc != null">
+                #{ordSrc,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null">
+                #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="cardNo != null">
+                #{cardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="ordMemo != null">
+                #{ordMemo,jdbcType=VARCHAR},
+            </if>
+            <if test="bhoDeptId != null">
+                #{bhoDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.cpdms.model.hair.BizHairOrderExample" resultType="java.lang.Long">
+        select count(*) from biz_hair_order
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
+        update biz_hair_order
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ordCode != null">
+                ord_code = #{record.ordCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ordTime != null">
+                ord_time = #{record.ordTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.ordEndTime != null">
+                ord_end_time = #{record.ordEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.finishTime != null">
+                finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.ordEmpId != null">
+                ord_emp_id = #{record.ordEmpId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ordState != null">
+                ord_state = #{record.ordState,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ordAmt != null">
+                ord_amt = #{record.ordAmt,jdbcType=DECIMAL},
+            </if>
+            <if test="record.ordSrc != null">
+                ord_src = #{record.ordSrc,jdbcType=VARCHAR},
+            </if>
+            <if test="record.tel != null">
+                tel = #{record.tel,jdbcType=VARCHAR},
+            </if>
+            <if test="record.cardNo != null">
+                card_no = #{record.cardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ordMemo != null">
+                ord_memo = #{record.ordMemo,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bhoDeptId != null">
+                bho_dept_id = #{record.bhoDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createBy != null">
+                create_by = #{record.createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createDate != null">
+                create_date = #{record.createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateBy != null">
+                update_by = #{record.updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="record.updateDate != null">
+                update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=TINYINT},
+            </if>
+
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+
+    <update id="updateByExample" parameterType="map">
+        update biz_hair_order
+        set
+        id = #{record.id,jdbcType=VARCHAR},
+        ord_code = #{record.ordCode,jdbcType=VARCHAR},
+        ord_time = #{record.ordTime,jdbcType=TIMESTAMP},
+        ord_end_time = #{record.ordEndTime,jdbcType=TIMESTAMP},
+        finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
+        ord_emp_id = #{record.ordEmpId,jdbcType=VARCHAR},
+        ord_state = #{record.ordState,jdbcType=VARCHAR},
+        ord_amt = #{record.ordAmt,jdbcType=DECIMAL},
+        ord_src = #{record.ordSrc,jdbcType=VARCHAR},
+        tel = #{record.tel,jdbcType=VARCHAR},
+        card_no = #{record.cardNo,jdbcType=VARCHAR},
+        ord_memo = #{record.ordMemo,jdbcType=VARCHAR},
+        bho_dept_id = #{record.bhoDeptId,jdbcType=VARCHAR},
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+        status = #{record.status,jdbcType=TINYINT}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.cpdms.model.hair.BizHairOrder">
+        update biz_hair_order
+        <set>
+            <if test="ordCode != null">
+                ord_code = #{ordCode,jdbcType=VARCHAR},
+            </if>
+            <if test="ordTime != null">
+                ord_time = #{ordTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ordEndTime != null">
+                ord_end_time = #{ordEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="finishTime != null">
+                finish_time = #{finishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ordEmpId != null">
+                ord_emp_id = #{ordEmpId,jdbcType=VARCHAR},
+            </if>
+            <if test="ordState != null">
+                ord_state = #{ordState,jdbcType=VARCHAR},
+            </if>
+            <if test="ordAmt != null">
+                ord_amt = #{ordAmt,jdbcType=DECIMAL},
+            </if>
+            <if test="ordSrc != null">
+                ord_src = #{ordSrc,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null">
+                tel = #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="cardNo != null">
+                card_no = #{cardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="ordMemo != null">
+                ord_memo = #{ordMemo,jdbcType=VARCHAR},
+            </if>
+            <if test="bhoDeptId != null">
+                bho_dept_id = #{bhoDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where
+        id = #{id,jdbcType=VARCHAR}
+
+    </update>
+
+    <select id="getHairs" resultMap="hairResult" parameterType="string">
+      select b.price,c.hair_name,c.hair_type,c.img_id,d.img_path,d.thumb_img_path from biz_hair_ord_hair b left join base_hair c on b.hair_id=c.id
+left join img_url d on c.img_id=d.img_id where hair_ord_id=#{id}
+    </select>
+
+    <select id="getOrderList" parameterType="com.cpdms.model.hair.BizHairOrder" resultMap="otherResultMap">
+        select * from biz_hair_order where 1=1
+        <if test="status != null and status != ''">and status=#{status}</if>
+        <if test="cardNo != null and cardNo != ''">and card_no=#{cardNo}</if>
+        <if test="ordCode != null and ordCode != ''">and ord_code=#{ordCode}</if>
+        order by ord_time desc
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.cpdms.model.hair.BizHairOrder">
+    update biz_hair_order
+    set
+             	        	    	 			ord_code = #{ordCode,jdbcType=VARCHAR},
+		     	        	    	 			ord_time = #{ordTime,jdbcType=TIMESTAMP},
+		     	        	    	 			ord_end_time = #{ordEndTime,jdbcType=TIMESTAMP},
+		     	        	    	 			finish_time = #{finishTime,jdbcType=TIMESTAMP},
+		     	        	    	 			ord_emp_id = #{ordEmpId,jdbcType=VARCHAR},
+		     	        	    	 			ord_state = #{ordState,jdbcType=VARCHAR},
+		     	        	    	 			ord_amt = #{ordAmt,jdbcType=DECIMAL},
+		     	        	    	 			ord_src = #{ordSrc,jdbcType=VARCHAR},
+		     	        	    	 			tel = #{tel,jdbcType=VARCHAR},
+		     	        	    	 			card_no = #{cardNo,jdbcType=VARCHAR},
+		     	        	    	 			ord_memo = #{ordMemo,jdbcType=VARCHAR},
+		     	        	    	 			bho_dept_id = #{bhoDeptId,jdbcType=VARCHAR},
+		     	        	    	 			create_by = #{createBy,jdbcType=VARCHAR},
+		     	        	    	 			create_date = #{createDate,jdbcType=TIMESTAMP},
+		     	        	    	 			update_by = #{updateBy,jdbcType=VARCHAR},
+		     	        	    	 			update_date = #{updateDate,jdbcType=TIMESTAMP},
+		     	        	    	 			status = #{status,jdbcType=TINYINT}
+		     	        where
+            id = #{id,jdbcType=VARCHAR}
+
+  </update>
+
+
+</mapper>

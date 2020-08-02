@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="admin/common/html/head :: head_Normal(~{::title},~{::link},~{::style})">
+
+    <title th:text=${title}></title>
+    <!-- 这儿引用单独的css link -->
+    <!-- Ladda for Bootstrap 3按钮加载进度插件 -->
+    <link rel="stylesheet" th:href="@{/static/admin/assets/js/button/ladda/ladda.min.css}">
+    <!-- bootstrap-table表单样式 -->
+    <link th:href="@{/static/admin/assets/js/bootstrap/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet"/>
+    <!-- 打印样式 -->
+    <link rel="stylesheet" th:href="@{/static/js/print.min.css}">
+    <style type="text/css">
+        /**
+        *这里写单独的css样式
+        */
+        .form-group {
+            margin-left:20px;
+            margin-bottom: 20px !important;
+        }
+        .form-group .control-label {
+            margin-right:10px;
+        }
+
+    </style>
+
+</head>
+
+<body id="listbody">
+<!-- # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 代码编写处 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # -->
+
+<!-- 右边内容 -->
+<div class="wrap-fluid">
+    <div class="container-fluid paper-wrap bevel tlbr">
+        <!-- 内容 -->
+        <!--标题 通用-->
+        <div th:replace="admin/common/html/title :: title(${title},${parenttitle},${isMsg},${msgHTML})">
+        </div>
+        <!-- 结束标题 通用-->
+        <div class="content-wrap">
+            <!-- 结束内容 -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- 搜索条件 -->
+
+                    <div class="nest" id="inlineClose">
+                        <div class="title-alt">
+                            <h6>搜索条件</h6>
+                            <!-- <div class="titleClose">
+                                <a class="gone" href="#inlineClose">
+                                    <span class="entypo-cancel"></span>
+                                </a>
+                            </div> -->
+                            <div class="titleToggle">
+                                <a class="nav-toggle-alt" href="#search_div">
+                                    <span class="entypo-down-open"></span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="body-nest" id="search_div" style="display: none">
+                            <div class="form_left">
+                                <form role="form" class="form-inline" id="searchForm">
+                                    <div class="form-group">
+                                        <label class="control-label">搜索订单编码</label>
+                                        <input type="text" name="ordCode" placeholder="订单编码" class="form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label">订单状态</label>
+                                        <select name="ordState" class="form-control">
+                                            <option value="">全部</option>
+                                            <option value="已取餐">已取餐</option>
+                                            <option value="已预定">已预定</option>
+                                            <option value="已取消">已取消</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label">餐段</label>
+                                        <select class="form-control" name="ordTimeRangeId">
+                                            <option value="">全部</option>
+                                            <option th:each="t : ${baseTimeRangeList}" th:value="${t.id}"
+                                                    th:text="${t.rangeName}"></option>
+                                        </select>
+                                    </div>
+
+                                    <div  class="form-group">
+                                        <label class="control-label">预计取餐时间：</label>
+                                            <input class="form-control MyDate" type="text" placeholder="预计取餐开始" name="plantedTakeTimeL"/>
+                                            <input class="form-control MyDate" type="text" placeholder="预计取餐结束" name="plantedTakeTimeG"/>
+                                    </div>
+
+                                    <div  class="form-group">
+                                        <label class="control-label">预定时间：</label>
+                                        <input class="form-control MyDateTime" type="text" placeholder="预定时间开始" name="ordTimeL"/>
+                                        <input class="form-control MyDateTime" type="text" placeholder="预定时间结束" name="ordTimeG"/>
+                                    </div>
+
+                                    <button onclick="$.table.search(this)" class="btn btn-success" type="button"><i
+                                            class="fa fa-search"></i>&nbsp;搜索
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END搜索条件 -->
+                    <!-- 空白页开始-->
+                    <div class="nest" id="Blank_PageClose">
+                        <div class="title-alt">
+                            <h6>表单</h6>
+                            <!-- <div class="titleClose">
+                                <a class="gone" href="#Blank_PageClose">
+                                    <span class="entypo-cancel"></span>
+                                </a>
+                            </div> -->
+                            <div class="titleToggle">
+                                <a class="nav-toggle-alt" href="#Blank_Page_Content">
+                                    <span class="entypo-up-open"></span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="body-nest" id="Blank_Page_Content">
+                            <!-- 工具条 -->
+                            <div class="btn-group hidden-xs" id="exampleTableEventsToolbar" role="group">
+                                <button onclick="print()" type="button" class="btn btn-primary">
+                                    <span class="entypo-plus-squared"></span>&nbsp;&nbsp;打印
+                                </button>
+                            </div>
+                            <!-- 工具条 end-->
+                            <table id="dataTable" class="table-striped footable-res footable metro-blue"
+                                   data-page-size="6">
+
+                            </table>
+                            <div id=print class="table-striped" data-page-size="6">
+
+                            </div>
+                            <div id="qrcode1" style="width:200px; height:200px; margin-top:15px;"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- 空白页结束 -->
+            </div>
+            <!-- 结束内容 -->
+        </div>
+    </div>
+</div>
+<!-- 结束右边内容 -->
+<!-- # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 代码编写处 END# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # -->
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    详情
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="modalBodyDetail" style="height: 400px;overflow-y: scroll;">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">关闭
+                </button>
+                <!--<button type="button" class="btn btn-primary submitUpdate">
+                    提交
+                </button>-->
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!-- 右侧隐藏滑块内容 -->
+<div th:include="admin/common/html/rightHide :: rightHide">
+
+</div>
+<!-- END 右侧隐藏滑块内容-->
+
+<!-- 通用js -->
+<div th:include="admin/common/html/js :: onload_js">
+
+</div>
+<!-- bootstarp 表格 -->
+<script th:src="@{/static/admin/assets/js/bootstrap/js/bootstrap-table/bootstrap-table.min.js}"
+        type="text/javascript"></script>
+<script th:src="@{/static/admin/assets/js/bootstrap/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}"
+        type="text/javascript"></script>
+<script th:src="@{/static/admin/assets/js/bootstrap/js/base_list.js}" type="text/javascript"></script>
+<!-- jquery-export 表格导出插件 -->
+<script th:src="@{/static/admin/assets/js/bootstrap/extensions/export/bootstrap-table-export.js}"
+        type="text/javascript"></script>
+<script th:src="@{/static/admin/assets/js/bootstrap/extensions/export/tableExport.js}" type="text/javascript"></script>
+
+<!-- 弹窗 -->
+<script th:src="@{/static/admin/assets/js/layer/layer.js}" type="text/javascript"></script>
+<!-- 遮罩层 -->
+<script th:src="@{/static/admin/assets/js/blockUI/jquery.blockUI.js}" type="text/javascript"></script>
+<!-- 打印 -->
+<script th:src="@{/static/js/print.min.js}" type="text/javascript"></script>
+<script th:src="@{/static/js/qrcode.min.js}" type="text/javascript"></script>
+<script type="text/javascript">
+    <!-- 导出 -->
+    var dataUrl = window.rootPath + "/BizOrderController/ordPrtList";
+    var printUrl = window.rootPath + "/BizOrderController/ordqrIdx";
+
+    function print() {
+        var rows = $("#dataTable").bootstrapTable('getSelections')
+        var ids = []
+        if (rows.length == 0) {
+            alert("请选择订单")
+            return
+        }
+        for (let a = 0;a<rows.length;a++) {
+            ids.push(rows[a].ordId)
+        }
+
+        $.modal.open("外卖取餐单打印", printUrl + "?data=" + encodeURI(ids));
+    }
+
+    var options = {
+        dataUrl: dataUrl,
+        printUrl: printUrl,
+        sortName: "roleSort",
+        modalName: "预订打印处理",
+        search: false,
+        dataColumns: [
+            {
+                checkbox: true,
+                formatter: function (value, row, index) {
+                    if (row.ordState == "已取消") {
+                        return {
+                            disabled: true
+                        };
+                    }
+                }
+            },
+            {
+                field: 'ordId',
+                title: '订单id',
+                visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'ordCode',
+                title: '订单编码'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'sell_type_name',
+                title: '订餐方式'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'take_no',
+                title: '取餐号'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'empName',
+                title: '预订人员'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'deptName',
+                title: '部门名称'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+            field: 'ordState',
+            title: '订单状态'
+            //visible: false, //隐藏
+            //searchable: false,//搜索
+            //sortable:false,//设置true为允许列可以排序
+            //order: asc //排序顺序
+        },
+            {
+                field: 'ordAmt',
+                title: '金额'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'ordTime',
+                title: '预订时间',
+                formatter: function (value, row, index) {
+                    var newDate = new Date();
+                    newDate.setTime(row.ordTime);
+                    return formatDate(newDate)
+
+                }
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'rangeName',
+                title: '餐段'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+
+            {
+                field: 'planedTakeTime',
+                title: '预计取餐时间'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                field: 'ordMemo',
+                title: '备注'
+                //visible: false, //隐藏
+                //searchable: false,//搜索
+                //sortable:false,//设置true为允许列可以排序
+                //order: asc //排序顺序
+            },
+            {
+                title: '操作',
+                formatter: function (value, row, index) {
+                    var id = row.id;
+                    var actions = [];
+                    actions.push('<a class="btn btn-success btn-xs"  href="#" onclick="days(\'' + row.ordId + '\')"><i class="fa fa-edit"></i>详情</a> ');
+                    return actions.join('');
+                }
+            }
+
+            /*
+            参照修改注释
+                    {
+                            field: 'xxstate',
+                            title: 'xx状态',
+                            formatter: function (value, row, index) {
+                                var actions = [];
+                                if(value==0){
+                                     actions.push('<span class="label label-primary">关闭</span>');
+                                }else if(value==1){
+                                     actions.push('<span class="label label-danger">开启</span>');
+                                }
+                                  return actions.join('');
+                             }
+                        }
+            */
+        ]
+    };
+    $(function () {
+        $(".MyDate").datetimepicker({
+            format: "yyyy-mm-dd",
+            // startDate: new Date(),
+            autoclose: true,
+            todayBtn: true,
+            language: 'zh-CN',
+            initialDate: new Date(),
+            minView: 2
+        });
+
+        $(".MyDateTime").datetimepicker({
+            format: "yyyy-mm-dd hh:00:00",
+            autoclose: true,
+            todayBtn: true,
+            language: 'zh-CN',
+            initialDate:new Date(),
+            minView: 1
+        });
+
+        var oTab = $.table.oTableInit(options);
+        oTab.Init();
+    })
+
+    // 详情
+    function days(id) {
+        $("#myModal").modal("show");
+        $.ajax({
+            url: "/BizOrderController/ordDetail",
+            method: "post",
+            data: {
+                "ordId": id
+            },
+            success: function (res) {
+                var str = "";
+                var shopList = "";
+                var data = res.data;
+                if (res.code === 200) {
+                    $(".modalBodyDetail").html("");
+                    str += "<p>订单号：<span>" + data.id + "</span></p>" +
+                            "<p>取餐号：<span>" + data.takeNo + "</span></p>" +
+                            "<p>订单来源：<span>" + data.ordSrc + "</span></p>" +
+                            "<p>订单方式：<span>" + data.sellTypeName + "</span></p>" +
+                            "<p>订餐时间：<span>" + data.ordTime + "</span></p>" +
+                            "<p>取餐时间：<span>" + data.planedTakeTime + "</span></p>" +
+                            "<p>订单人电话：<span>" + data.tel + "</span></p>" +
+                            "<p>订单来源：<span>" + data.ordSrc + "</span></p>" +
+                            "<p style='border-bottom: 1px solid #c5c5c5;padding: 0 0 10px 0;'>订单状态：<span>" + data.ordState + "</span></p>" +
+                            "<p >订单商品：" + "</p>";
+                    for (var i = 0; i < data.bizOrdFoodList.length; i++) {
+                        shopList +=
+                                /*"<p><img src="+ data.bizOrdFoodList[i].baseFood.imgs[0].imgPath + "></p>"+*/
+                                "<p><img src='" +
+                                (data.bizOrdFoodList[i].baseFood.imgs.length > 0 ? (data.bizOrdFoodList[i].baseFood.imgs[0].imgPath ? data.bizOrdFoodList[i].baseFood.imgs[0].imgPath : '') : '')
+                                + "'></p>" +
+                                "<p>商品名：" + data.bizOrdFoodList[i].baseFood.foodName + "</p>" +
+                                "<p>商品价格：" + data.bizOrdFoodList[i].price + "</p>" +
+                                "<p>商品数量：" + data.bizOrdFoodList[i].qty + "</p>" +
+                                "<p style='border-bottom: 1px solid #c5c5c5;padding: 0 0 10px 0;'>商品规格：" + data.bizOrdFoodList[i].baseFood.foodUnit + "</p>"
+                    }
+                    ;
+                    $(".modalBodyDetail").append(str);
+                    $(".modalBodyDetail").append(shopList);
+                }
+            },
+            error: function (err) {
+
+            },
+        })
+    }
+
+    function formatDate(datetime) {
+        var year = datetime.getFullYear(),
+                month = (datetime.getMonth() + 1 < 10) ? '0' + (datetime.getMonth() + 1) : datetime.getMonth() + 1,
+                day = datetime.getDate() < 10 ? '0' + datetime.getDate() : datetime.getDate(),
+                hour = datetime.getHours() < 10 ? '0' + datetime.getHours() : datetime.getHours(),
+                min = datetime.getMinutes() < 10 ? '0' + datetime.getMinutes() : datetime.getMinutes(),
+                sec = datetime.getSeconds() < 10 ? '0' + datetime.getSeconds() : datetime.getSeconds();
+        return year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec;
+    }
+
+</script>
+
+</body>
+
+
+</html>

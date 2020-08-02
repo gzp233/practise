@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpdms.mapper.dinning.BaseFoodMapper">
+    <resultMap id="BaseResultMap" type="com.cpdms.model.dinning.BaseFood">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="food_code" jdbcType="VARCHAR" property="foodCode"/>
+        <result column="img_id" jdbcType="VARCHAR" property="imgId"/>
+        <result column="food_name" jdbcType="VARCHAR" property="foodName"/>
+        <result column="food_unit" jdbcType="VARCHAR" property="foodUnit"/>
+        <result column="food_price" jdbcType="DECIMAL" property="foodPrice"/>
+        <result column="food_pack" jdbcType="VARCHAR" property="foodPack"/>
+        <result column="food_spec" jdbcType="VARCHAR" property="foodSpec"/>
+        <result column="bf_dept_id" jdbcType="VARCHAR" property="bfDeptId"/>
+        <result column="food_status" jdbcType="INTEGER" property="foodStatus"/>
+        <result column="food_desc" jdbcType="VARCHAR" property="foodDesc"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="range_names" jdbcType="VARCHAR" property="rangeNames"/>
+        <result column="sell_type_names" jdbcType="VARCHAR" property="sellTypeNames"/>
+        <result column="avg_fraction" jdbcType="VARCHAR" property="avgFraction"/>
+        <result column="avg_star" jdbcType="VARCHAR" property="avgStar"/>
+        <collection property="imgs" ofType="com.cpdms.model.dinning.ImgUrl">
+            <result property="imgPath" column="img_path"/>
+            <result property="thumbImgPath" column="thumb_img_path"/>
+            <result property="imageId" column="image_id"/>
+        </collection>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+	  	  	      	id,
+       	  	      	food_code,
+       	  	      	img_id,
+       	  	      	food_name,
+       	  	      	food_unit,
+       	  	      	food_price,
+       	  	      	food_pack,
+       	  	      	food_spec,
+       	  	      	bf_dept_id,
+       	  	      	food_status,
+       	  	      	food_desc,
+       	  	      	create_by,
+       	  	      	create_date,
+       	  	      	update_by,
+       	  	      	update_date,
+       	  	    	  	status
+       	</sql>
+    <select id="selectByExample" parameterType="com.cpdms.model.dinning.BaseFoodExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from base_food
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from base_food
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from base_food
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.cpdms.model.dinning.BaseFoodExample">
+        delete from base_food
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="com.cpdms.model.dinning.BaseFood">
+    insert into base_food (
+      	  	       id,
+       	  	       food_code,
+       	  	       img_id,
+       	  	       food_name,
+       	  	       food_unit,
+       	  	       food_price,
+       	  	       food_pack,
+       	  	       food_spec,
+       	  	       bf_dept_id,
+       	  	       food_status,
+       	  	       food_desc,
+       	  	       create_by,
+       	  	       create_date,
+       	  	       update_by,
+       	  	       update_date,
+       	  	    	  status
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{foodCode,jdbcType=VARCHAR},
+       	  	      	#{imgId,jdbcType=VARCHAR},
+       	  	      	#{foodName,jdbcType=VARCHAR},
+       	  	      	#{foodUnit,jdbcType=VARCHAR},
+       	  	      	#{foodPrice,jdbcType=DECIMAL},
+       	  	      	#{foodPack,jdbcType=VARCHAR},
+       	  	      	#{foodSpec,jdbcType=VARCHAR},
+       	  	      	#{bfDeptId,jdbcType=VARCHAR},
+       	  	      	#{foodStatus,jdbcType=INTEGER},
+       	  	      	#{foodDesc,jdbcType=VARCHAR},
+       	  	      	#{createBy,jdbcType=VARCHAR},
+       	  	      	#{createDate,jdbcType=TIMESTAMP},
+       	  	      	#{updateBy,jdbcType=VARCHAR},
+       	  	      	#{updateDate,jdbcType=TIMESTAMP},
+       	  	    	  #{status,jdbcType=INTEGER}
+       	    )
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.cpdms.model.dinning.BaseFood">
+        insert into base_food
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="id != null">
+                id,
+            </if>
+
+
+            <if test="foodCode != null">
+                food_code,
+            </if>
+
+
+            <if test="imgId != null">
+                img_id,
+            </if>
+
+
+            <if test="foodName != null">
+                food_name,
+            </if>
+
+
+            <if test="foodUnit != null">
+                food_unit,
+            </if>
+
+
+            <if test="foodPrice != null">
+                food_price,
+            </if>
+
+
+            <if test="foodPack != null">
+                food_pack,
+            </if>
+
+
+            <if test="foodSpec != null">
+                food_spec,
+            </if>
+
+
+            <if test="bfDeptId != null">
+                bf_dept_id,
+            </if>
+
+
+            <if test="foodStatus != null">
+                food_status,
+            </if>
+
+
+            <if test="foodDesc != null">
+                food_desc,
+            </if>
+
+
+            <if test="createBy != null">
+                create_by,
+            </if>
+
+
+            <if test="createDate != null">
+                create_date,
+            </if>
+
+
+            <if test="updateBy != null">
+                update_by,
+            </if>
+
+
+            <if test="updateDate != null">
+                update_date,
+            </if>
+
+
+            <if test="status != null">
+                status,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="foodCode != null">
+                #{foodCode,jdbcType=VARCHAR},
+            </if>
+            <if test="imgId != null">
+                #{imgId,jdbcType=VARCHAR},
+            </if>
+            <if test="foodName != null">
+                #{foodName,jdbcType=VARCHAR},
+            </if>
+            <if test="foodUnit != null">
+                #{foodUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="foodPrice != null">
+                #{foodPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="foodPack != null">
+                #{foodPack,jdbcType=VARCHAR},
+            </if>
+            <if test="foodSpec != null">
+                #{foodSpec,jdbcType=VARCHAR},
+            </if>
+            <if test="bfDeptId != null">
+                #{bfDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="foodStatus != null">
+                #{foodStatus,jdbcType=INTEGER},
+            </if>
+            <if test="foodDesc != null">
+                #{foodDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.cpdms.model.dinning.BaseFoodExample" resultType="java.lang.Long">
+        select count(*) from base_food
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
+        update base_food
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.foodCode != null">
+                food_code = #{record.foodCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.imgId != null">
+                img_id = #{record.imgId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.foodName != null">
+                food_name = #{record.foodName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.foodUnit != null">
+                food_unit = #{record.foodUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="record.foodPrice != null">
+                food_price = #{record.foodPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="record.foodPack != null">
+                food_pack = #{record.foodPack,jdbcType=VARCHAR},
+            </if>
+            <if test="record.foodSpec != null">
+                food_spec = #{record.foodSpec,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bfDeptId != null">
+                bf_dept_id = #{record.bfDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.foodStatus != null">
+                food_status = #{record.foodStatus,jdbcType=INTEGER},
+            </if>
+            <if test="record.foodDesc != null">
+                food_desc = #{record.foodDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createBy != null">
+                create_by = #{record.createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createDate != null">
+                create_date = #{record.createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateBy != null">
+                update_by = #{record.updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="record.updateDate != null">
+                update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=INTEGER},
+            </if>
+
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+
+    <update id="updateByExample" parameterType="map">
+        update base_food
+        set
+        id = #{record.id,jdbcType=VARCHAR},
+        food_code = #{record.foodCode,jdbcType=VARCHAR},
+        img_id = #{record.imgId,jdbcType=VARCHAR},
+        food_name = #{record.foodName,jdbcType=VARCHAR},
+        food_unit = #{record.foodUnit,jdbcType=VARCHAR},
+        food_price = #{record.foodPrice,jdbcType=DECIMAL},
+        food_pack = #{record.foodPack,jdbcType=VARCHAR},
+        food_spec = #{record.foodSpec,jdbcType=VARCHAR},
+        bf_dept_id = #{record.bfDeptId,jdbcType=VARCHAR},
+        food_status = #{record.foodStatus,jdbcType=INTEGER},
+        food_desc = #{record.foodDesc,jdbcType=VARCHAR},
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+        status = #{record.status,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.cpdms.model.dinning.BaseFood">
+        update base_food
+        <set>
+            <if test="foodCode != null">
+                food_code = #{foodCode,jdbcType=VARCHAR},
+            </if>
+            <if test="imgId != null">
+                img_id = #{imgId,jdbcType=VARCHAR},
+            </if>
+            <if test="foodName != null">
+                food_name = #{foodName,jdbcType=VARCHAR},
+            </if>
+            <if test="foodUnit != null">
+                food_unit = #{foodUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="foodPrice != null">
+                food_price = #{foodPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="foodPack != null">
+                food_pack = #{foodPack,jdbcType=VARCHAR},
+            </if>
+            <if test="foodSpec != null">
+                food_spec = #{foodSpec,jdbcType=VARCHAR},
+            </if>
+
+            <if test="bfDeptId != null">
+                bf_dept_id = #{bfDeptId,jdbcType=VARCHAR},
+            </if>
+            <if test="foodStatus != null">
+                food_status = #{foodStatus,jdbcType=INTEGER},
+            </if>
+            <if test="foodDesc != null">
+                food_desc = #{foodDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+        </set>
+        where
+        id = #{id,jdbcType=VARCHAR}
+
+    </update>
+
+
+    <update id="updateByPrimaryKey" parameterType="com.cpdms.model.dinning.BaseFood">
+    update base_food
+    set
+             	        	    	 			food_code = #{foodCode,jdbcType=VARCHAR},
+		     	        	    	 			img_id = #{imgId,jdbcType=VARCHAR},
+		     	        	    	 			food_name = #{foodName,jdbcType=VARCHAR},
+		     	        	    	 			food_unit = #{foodUnit,jdbcType=VARCHAR},
+		     	        	    	 			food_price = #{foodPrice,jdbcType=DECIMAL},
+		     	        	    	 			food_pack = #{foodPack,jdbcType=VARCHAR},
+		     	        	    	 			food_spec = #{foodSpec,jdbcType=VARCHAR},
+		     	        	    	 			bf_dept_id = #{bfDeptId,jdbcType=VARCHAR},
+		     	        	    	 			food_status = #{foodStatus,jdbcType=INTEGER},
+		     	        	    	 			food_desc = #{foodDesc,jdbcType=VARCHAR},
+		     	        	    	 			create_by = #{createBy,jdbcType=VARCHAR},
+		     	        	    	 			create_date = #{createDate,jdbcType=TIMESTAMP},
+		     	        	    	 			update_by = #{updateBy,jdbcType=VARCHAR},
+		     	        	    	 			update_date = #{updateDate,jdbcType=TIMESTAMP},
+		     	        	    	 			status = #{status,jdbcType=INTEGER}
+		     	        where
+            id = #{id,jdbcType=VARCHAR}
+
+  </update>
+
+    <select id="selectFoodsAndImgs" parameterType="java.util.List" resultMap="BaseResultMap">
+        SELECT
+        a.*,
+        b.img_path,b.thumb_img_path,c.avg_fraction,c.avg_star,se.sellTypeNames as sell_type_names,ra.rangeNames as
+        range_names
+        FROM
+        base_food a
+        LEFT OUTER JOIN img_url b ON a.img_id = b.img_id
+        left join (select food_id appraise_food_id,avg(fraction) avg_fraction,avg(star) avg_star from appraise group by
+        food_id) c on a.id=c.appraise_food_id
+        left join (select GROUP_CONCAT(a.sell_type_name SEPARATOR '/') as sellTypeNames,b.food_id from base_sell_type a
+        left join ref_food_sell b on a.id=b.sell_type_id group by b.food_id) se on a.id=se.food_id
+        left join (select GROUP_CONCAT(a.range_name SEPARATOR '/') as rangeNames,b.food_id from base_time_range a left
+        join ref_food_time b on a.id=b.time_id group by b.food_id) ra on a.id=ra.food_id
+
+        WHERE a.STATUS=1 and a.food_status=1 and a.id in
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        order by a.create_date desc
+    </select>
+
+    <select id="selectRelative" parameterType="com.cpdms.model.dinning.BaseFood" resultMap="BaseResultMap">
+        select a.*, b.img_path,b.thumb_img_path from base_food a left join img_url b ON a.img_id = b.img_id WHERE
+        a.STATUS=1
+        <if test="foodName != null and foodName != ''">and a.food_name like CONCAT('%',#{foodName},'%')</if>
+        <if test="foodStatus == 0 || foodStatus == 1">and a.food_status =#{foodStatus}</if>
+        order by a.create_date desc
+    </select>
+
+    <select id="selectOne" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    a.*,b.img_path,b.thumb_img_path,b.id as image_id
+    from base_food a left join img_url b on a.img_id = b.img_id
+    where a.id = #{id,jdbcType=VARCHAR}
+  </select>
+
+</mapper>
