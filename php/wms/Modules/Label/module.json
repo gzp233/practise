@@ -1,0 +1,17 @@
+{
+    "name": "Label",
+    "alias": "label",
+    "description": "标签管理模块",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Label\\Providers\\LabelServiceProvider",
+        "Modules\\Label\\Providers\\EventServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}
